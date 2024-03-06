@@ -1,0 +1,264 @@
+:root {
+  --signup-box-maxWidth: 350px;
+  --signup-box-height: 500px;
+}
+
+.signup_page {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.signup_box {
+  margin: 0 auto;
+  width: var(--signup-box-maxWidth);
+  border: 1px solid var(--bcs-gray);
+  border-radius: 5px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.bcs_logo {
+  margin-left: 32px;
+  /* border: 1px solid red; */
+  width: 280px;
+  height: 60px;
+  /* margin-top: 10px; */
+}
+
+.bcs_logo a {
+  display: flex;
+  width: 100%;
+  height: 100%;
+}
+
+.bcs_logo img {
+  width: 100%;
+  height: 100%;
+}
+
+.signup_display {
+  width: 100%;
+  flex-direction: column;
+}
+
+/* bcs소개 */
+.bcs_introduce {
+  text-align: center;
+  margin: 10px 0px;
+  color: var(--bcs-gray);
+}
+
+/* 소셜로그인 부분 */
+.social_login_box {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.social_login_btn {
+  display: flex;
+  align-items: center;
+  padding: 7px 0px;
+  border-radius: 20px;
+  justify-content: center;
+  font-size: 16px;
+  cursor: pointer;
+  color: var(--bcs-white);
+  border: none;
+  margin: 3px 0px;
+}
+
+.social_login_btn:hover {
+  text-decoration: underline;
+}
+
+.naver_ico,
+.kakao_ico {
+  width: 20px;
+  height: 20px;
+  margin-right: 8px;
+}
+
+#naver {
+  background-color: var(--naver-color);
+}
+
+#kakao {
+  background-color: var(--kakao-color);
+}
+
+/* 나누는 선 부분 */
+.divide {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 10px 0px;
+}
+
+.divide_line {
+  width: 40%;
+  border-bottom: 1px solid gray;
+}
+
+.divide_or {
+  font-size: 14px;
+  color: gray;
+}
+
+/* 에러처리 부분 */
+.error_status {
+  width: 100%;
+  text-align: center;
+  color: red;
+  font-size: 14px;
+  font-weight: 400;
+}
+
+/* 로그인 정보입력 부분 */
+.signup_info_box {
+  width: 100%;
+}
+
+.signup_form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.signup_infomation_box {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.signup_infomation_box input {
+  padding: 12px 8px;
+  border: none;
+  margin: 3px 0px;
+  outline: none;
+  border-bottom: 1px solid black;
+}
+
+.signup_submit_btn {
+  width: 100%;
+  margin: 15px 0px 0px 0px;
+}
+
+.signup_btn {
+  background-color: var(--bcs-signiture-color);
+  width: 100%;
+  padding: 8px;
+  border-radius: 20px;
+  font-size: 18px;
+  font-weight: 600;
+  border: none;
+  outline: none;
+  color: var(--bcs-white);
+  cursor: pointer;
+}
+
+.signup_btn:hover {
+  background-color: var(--bcs-deep-blue);
+}
+
+/* 이메일 인증 부분 */
+.email_otp_section {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.otp_text {
+  font-size: 16px;
+  font-weight: 600;
+  text-align: center;
+  margin: 15px 0px;
+}
+
+.otp_box {
+  margin-top: 25px;
+  display: flex;
+  flex-direction: column;
+  width: 90%;
+}
+
+.otp_input_box {
+  display: flex;
+  align-items: center;
+  height: 40px;
+  border: 1px solid #999;
+  margin-bottom: 15px;
+}
+
+.otp_input_box input {
+  height: 100%;
+  outline: none;
+  flex: 1;
+  font-weight: 600;
+  border: none;
+  padding: 0px 6px;
+}
+
+.otp_valid_time {
+  color: red;
+  font-size: 14px;
+  margin: 0px 6px;
+}
+
+.otp_resend {
+  cursor: pointer;
+  color: #999;
+  margin-right: 6px;
+  font-size: 13px;
+}
+
+.otp_resend:hover {
+  color: #000;
+}
+
+.otp_box button {
+  font-size: 16px;
+  background-color: var(--bcs-light-blue);
+  color: #fff;
+  border: 1px solid var(--bcs-light-blue);
+  outline: none;
+  cursor: pointer;
+  border-radius: 20px;
+  height: 40px;
+}
+
+.otp_box button:hover {
+  background-color: var(--bcs-deep-blue);
+}
+
+/* 회원가입으로 */
+.signup_sub {
+  width: var(--login-box-maxWidth);
+  border: 1px solid var(--bcs-gray);
+  border-radius: 5px;
+  margin: 0 auto;
+  height: 40px;
+  margin-top: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.signup_sub a {
+  font-size: 15px;
+  color: var(--bcs-signiture-color);
+  margin-left: 8px;
+}
+
+.signup_sub a:hover {
+  text-decoration: underline;
+}

@@ -1,0 +1,199 @@
+:root {
+  --login-box-maxWidth: 350px;
+  --login-box-height: 500px;
+}
+
+.login_page {
+  width: 100%;
+  min-height: 100vh;
+  border: 1px solid red;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.login_box {
+  margin: 0 auto;
+  width: var(--login-box-maxWidth);
+  border: 1px solid var(--bcs-gray);
+  border-radius: 5px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.bcs_logo {
+  margin-left: 32px;
+  /* border: 1px solid red; */
+  width: 280px;
+  height: 60px;
+  /* margin-top: 10px; */
+}
+
+.bcs_logo a {
+  display: flex;
+  width: 100%;
+  height: 100%;
+}
+
+.bcs_logo img {
+  width: 100%;
+  height: 100%;
+}
+
+/* bcs소개 */
+.bcs_introduce {
+  text-align: center;
+  margin: 10px 0px;
+  color: var(--bcs-gray);
+}
+
+/* 소셜로그인 부분 */
+.social_login_box {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.social_login_btn {
+  display: flex;
+  align-items: center;
+  padding: 7px 0px;
+  border-radius: 20px;
+  justify-content: center;
+  font-size: 16px;
+  cursor: pointer;
+  color: var(--bcs-white);
+  border: none;
+  margin: 3px 0px;
+}
+
+.social_login_btn:hover {
+  text-decoration: underline;
+}
+
+.naver_ico,
+.kakao_ico {
+  width: 20px;
+  height: 20px;
+  margin-right: 8px;
+}
+
+#naver {
+  background-color: var(--naver-color);
+}
+
+#kakao {
+  background-color: var(--kakao-color);
+}
+
+/* 나누는 선 부분 */
+.divide {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 10px 0px;
+}
+
+.divide_line {
+  width: 40%;
+  border-bottom: 1px solid gray;
+}
+
+.divide_or {
+  font-size: 14px;
+  color: gray;
+}
+
+/* 에러처리 부분 */
+.err_box {
+  width: 100%;
+  text-align: center;
+  background-color: red;
+}
+
+/* 로그인 정보입력 부분 */
+.login_info_box {
+  width: 100%;
+}
+
+.Login_form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.login_infomation_box {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.login_infomation_box input {
+  padding: 12px 8px;
+  border: none;
+  margin: 3px 0px;
+  outline: none;
+  border-bottom: 1px solid black;
+}
+
+.login_submit_btn {
+  width: 100%;
+  margin: 15px 0px;
+}
+
+.login_btn {
+  background-color: var(--bcs-signiture-color);
+  width: 100%;
+  padding: 8px;
+  border-radius: 20px;
+  font-size: 18px;
+  font-weight: 600;
+  border: none;
+  outline: none;
+  color: var(--bcs-white);
+  cursor: pointer;
+}
+
+.login_btn:hover {
+  background-color: var(--bcs-deep-blue);
+}
+
+/* 비밀번호 찾기 */
+.find_pw {
+  width: 100%;
+  text-align: center;
+}
+
+.find_pw_link {
+  font-size: 14px;
+  color: var(--bcs-gray);
+}
+
+.find_pw_link:hover {
+  text-decoration: underline;
+}
+
+.login_sub {
+  width: var(--login-box-maxWidth);
+  border: 1px solid var(--bcs-gray);
+  border-radius: 5px;
+  margin: 0 auto;
+  height: 40px;
+  margin-top: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.login_sub a {
+  font-size: 15px;
+  color: var(--bcs-signiture-color);
+  margin-left: 8px;
+}
+
+.login_sub a:hover {
+  text-decoration: underline;
+}

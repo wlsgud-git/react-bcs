@@ -1,0 +1,551 @@
+:root {
+  /* large size */
+  /* width */
+  --lsize-video-width: 345px;
+  --video-comment-width: 386px;
+
+  /* height */
+  --bcs-song-video-container-height: 632px;
+  --bcs-song-video-height: 532px;
+  /* middle size */
+  --result-video-width: 212px;
+  --result-video-height: 392px;
+
+  --result-video-box-height: 90px;
+}
+
+/* large size */
+
+.bcs_lsize_video_container {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+  border-bottom: 1px solid #999;
+}
+
+.bcs_lsize_video_box {
+  position: relative;
+  border-radius: 15px;
+  overflow: hidden;
+  width: var(--lsize-video-width);
+  height: var(--bcs-song-video-height);
+  min-width: var(--lsize-video-width);
+  max-width: var(--lsize-video-width);
+}
+
+.bcs_lsize_video {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.bcs_lsize_video_detail_go {
+  display: flex;
+  width: 100%;
+  height: 100%;
+}
+
+.bcs_lsize_video_thumbnail {
+  position: relative;
+  width: 100%;
+  z-index: 123;
+  height: 100%;
+  /* background: url("/image/dog.jpg"); */
+  background-size: var(--lsize-video-width) var(--bcs-song-video-height);
+}
+
+.bcs_lsize_video_src {
+  position: relative;
+  z-index: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* 비디오 위부분 */
+.bcs_lsize_top {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 80px;
+  display: flex;
+  z-index: 1234;
+  align-items: center;
+}
+
+.bcs_lsize_video_info_section {
+  width: calc(100% - 60px);
+  height: 100%;
+  display: flex;
+}
+
+.bcs_lsize_writer_thumbnail_section {
+  width: 60px;
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.bcs_lsize_wrtier_box {
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  margin: 0 auto;
+  overflow: hidden;
+}
+
+.bcs_lsize_writer_thumbnail_go {
+  display: flex;
+  width: 100%;
+  height: 100%;
+}
+
+.bcs_lsize_writer_thumbnail_go img {
+  width: 100%;
+  height: 100%;
+}
+
+.bcs_lsize_writer_info_section {
+  width: calc(100% - 60px);
+  height: 100%;
+  /* border: 2px solid black; */
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.bcs_lsize_writer_section {
+  width: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.bcs_lsize_usernick {
+  max-width: calc(100% - 60px);
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  word-break: break-all;
+  color: #fff;
+}
+
+.bcs_lsize_usernikcname {
+  color: #fff;
+  font-weight: 600;
+}
+
+.bcs_lsize_follow_btn {
+  margin-left: 5px;
+  padding: 4px;
+  background-color: var(--bcs-light-blue);
+  color: #fff;
+  cursor: pointer;
+  border: none;
+  border-radius: 20px;
+  outline: none;
+}
+
+.bcs_lsize_title_section {
+  width: 100%;
+  max-width: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  word-break: break-all;
+  color: #000;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.bcs_lsise_title {
+}
+
+/* 커버송 부분 */
+.bcs_lsize_coversong_section {
+  width: 45px;
+  height: 45px;
+  border-radius: 10px;
+  margin: 0 auto;
+  overflow: hidden;
+}
+
+.bcs_lsize_coversong_box {
+  width: 45px;
+  border-radius: 10px;
+  overflow: hidden;
+  height: 45px;
+}
+
+.bcs_lsize_coversong_go {
+  width: 100%;
+  display: flex;
+  height: 100%;
+}
+
+.bcs_lsize_coversong_go img {
+  width: 100%;
+  height: 100%;
+}
+
+/* 비디오 사이드 기능 */
+.bcs_lsize_sub_menu {
+  position: absolute;
+  bottom: 90px;
+  right: 5px;
+  z-index: 1234;
+}
+
+.bcs_lsize_sub_menu div {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 10px 10px 0px 0px;
+}
+
+.bcs_lsize_sub_menu div button {
+  width: var(--bcs-sub-menu-width);
+  height: var(--bcs-sub-menu-height);
+  border: none;
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
+  cursor: pointer;
+  color: #fff;
+  font-size: 17px;
+}
+
+.bcs_lsize_sub_menu div button:hover {
+  background-color: rgba(255, 255, 255, 0.3);
+}
+
+.bcs_lsize_sub_menu div span {
+  color: #fff;
+  margin-top: 2px;
+}
+
+/* 컨트롤 부분 */
+.bcs_lsize_func_control {
+  position: absolute;
+  bottom: 45px;
+  left: 0;
+  width: 100%;
+  height: 20px;
+  z-index: 1234;
+  /* border: 1px solid red; */
+  display: flex;
+  align-items: center;
+  padding: 0px 16px;
+  justify-content: space-between;
+}
+
+.bcs_lsize_func_control button {
+  padding: 3px;
+  border: none;
+  outline: none;
+  background-color: inherit;
+  color: #fff;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+/* 기능 아래부분 */
+.bcs_lsize_func_bottom {
+  position: absolute;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  left: 0;
+  width: 100%;
+  height: 45px;
+  z-index: 1234;
+  /* border: 1px solid blue; */
+  padding: 0px 10px;
+}
+
+.video_current_time {
+  color: #fff;
+  font-size: 14px;
+  font-weight: 400;
+}
+
+.video_full_time {
+  color: #fff;
+  font-size: 14px;
+  font-weight: 400;
+}
+
+/* 프로그레스 바 부분 */
+.progressbar_section {
+  position: relative;
+  left: 0;
+  width: 240px;
+  height: 20px;
+  margin: 0px 10px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.progressbar_range {
+  width: 100%;
+}
+
+.bcs_song_comment_container {
+  min-width: var(--video-comment-width);
+  height: var(--bcs-song-video-height);
+  border-radius: 10px;
+  border: 1px solid #999;
+  display: flex;
+  flex-direction: column;
+  padding: 0px 8px;
+}
+
+.comments_info {
+  width: 100%;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.comments_info_text {
+  display: flex;
+  align-items: center;
+}
+
+.comments_text {
+  font-size: 18px;
+  font-weight: 600;
+  margin-right: 10px;
+}
+
+.comments_count {
+  font-size: 16px;
+  font-weight: 400;
+  color: #999;
+}
+
+.comments_close_btn {
+  padding: 4px;
+  border: none;
+  outline: none;
+  background-color: #fff;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+/* 중간 지점 */
+.comments_list {
+  min-height: 400px;
+  display: flex;
+  max-height: 400px;
+  position: relative;
+  /* overflow-y: scroll; */
+  flex-direction: column;
+  width: 100%;
+}
+
+.c_info_box {
+  width: 100%;
+  height: 50px;
+  display: flex;
+  margin: 7px 0px;
+  align-items: center;
+  padding: 3px 5px;
+}
+
+.c_user_profile {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  margin-right: 10px;
+}
+
+.c_user_profile_box {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  display: inline-block;
+  overflow: hidden;
+}
+
+.c_user_profile_box img {
+  width: 100%;
+  height: 100%;
+}
+
+/* 댓글 내용 부분 */
+.c_content_info {
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+  justify-content: center;
+  width: 295px;
+}
+
+.c_userOrcreate {
+  width: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.c_usernick {
+  max-width: 220px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  word-break: break-all;
+  font-size: 14px;
+  margin-right: 3px;
+}
+
+.c_createat {
+  font-size: 12px;
+  color: #999;
+}
+
+.c_content_box {
+  width: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  word-break: break-all;
+}
+
+.c_content {
+  font-size: 16px;
+  font-weight: 500;
+}
+
+/* 댓글 사이드 부분 */
+.c_other {
+  display: flex;
+  align-items: center;
+  height: 100%;
+  margin-left: 3px;
+  position: relative;
+}
+
+.c_other_btn {
+  border: none;
+  outline: none;
+  background-color: inherit;
+  font-size: 24px;
+  height: 100%;
+  padding: 3px;
+  cursor: pointer;
+  color: #999;
+}
+
+.c_other_btn:hover {
+  color: #000;
+}
+
+.c_content_control {
+  position: absolute;
+  width: 80px;
+  top: 40px;
+  overflow: hidden;
+  z-index: 1234;
+  border-radius: 10px;
+}
+
+.c_content_control button {
+  width: 100%;
+  padding: 5px;
+  background-color: #fff;
+  font-size: 15px;
+  border: 1px solid #fff;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  outline: none;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.c_content_control button:hover {
+  background-color: var(--bcs-border-light-gray);
+}
+
+/* 댓글 작석 부분 */
+.comment_write {
+  width: 100%;
+  height: 70px;
+}
+
+.comment_form {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.writer_thumbnail {
+  width: 40px;
+  height: 40px;
+  margin-right: 10px;
+}
+
+.writer_thumb_box {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  overflow: hidden;
+  display: inline-block;
+}
+
+.writer_thumb_box img {
+  width: 100%;
+  height: 100%;
+}
+
+.comment_write_info {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.comment_write_input {
+  width: 100%;
+}
+
+.comment_write_input input {
+  width: 100%;
+  outline: none;
+  border: none;
+  padding: 5px 0px;
+  border-bottom: 1px solid black;
+}
+
+.comment_control_sec {
+  margin-top: 5px;
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.comment_control_sec button {
+  padding: 5px 8px;
+  outline: none;
+  margin: 0px 2px;
+  cursor: pointer;
+  border: none;
+  font-size: 16px;
+}
+
+.comment_clear {
+  background-color: inherit;
+}
+
+.comment_btn {
+  color: #fff;
+  background-color: var(--bcs-light-blue);
+  border-radius: 20px;
+}

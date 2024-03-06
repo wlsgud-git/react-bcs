@@ -1,0 +1,437 @@
+:root {
+  /* 비디오 모달 관련 */
+  --video-modal-width: 864px;
+  --video-modal-height: 492px;
+
+  --video-modal-topHeight: 50px;
+  --video-modal-infoHeight: 382px;
+  --video-modal-bottomHeight: 60px;
+
+  --video-detail-width: 564px;
+  --video-preview-width: 250px;
+  --video-preview-height: 340px;
+}
+
+.md_bcs_video_modal {
+  width: var(--video-modal-width);
+  height: var(--video-modal-height);
+  background-color: #fff;
+  border-radius: 5px;
+  display: flex;
+  flex-direction: column;
+}
+
+.md_video_top_section {
+  width: 100%;
+  min-height: var(--video-modal-topHeight);
+  display: flex;
+  padding: 0px 15px;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 18px;
+  font-weight: 600;
+  border-bottom: 1px solid black;
+}
+
+.md_video_user_nick {
+  color: #999;
+}
+
+.md_video_modal_close {
+  color: red;
+  cursor: pointer;
+}
+
+.md_video_upload_file_section,
+.md_video_upload_detail_section {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: calc(var(--video-modal-height) - var(--video-modal-topHeight));
+}
+
+/* 비디오 파일 업로드 부분 */
+
+.md_video_upload_file_section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.md_video_upload_file_section div {
+  margin-bottom: 20px;
+}
+
+.md_video_upload_top {
+  width: 170px;
+  height: 170px;
+}
+
+.md_video_file_upload_btn {
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+  outline: none;
+  border-radius: 50%;
+  border: none;
+}
+
+.md_video_file_upload_btn i {
+  font-size: 50px;
+}
+
+.md_video_upload_mid {
+  text-align: center;
+}
+
+.md_video_upload_mid p {
+  margin-bottom: 8px;
+}
+
+.md_video_file_recommend {
+  font-size: 18px;
+}
+
+.md_video_file_caution {
+  font-size: 14px;
+  color: #999;
+}
+
+.md_video_file_err {
+  font-size: 14px;
+  color: red;
+}
+
+.md_video_file_btn {
+  padding: 8px 15px;
+  background-color: var(--bcs-light-blue);
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+  outline: none;
+  border: 1px solid var(--bcs-light-blue);
+}
+
+.md_video_file_btn:hover {
+  background-color: var(--bcs-deep-blue);
+}
+
+/* 비디오 세부정보 부분 */
+.md_video_infomation_section {
+  height: var(--video-modal-infoHeight);
+  width: 100%;
+}
+
+.md_video_make_form {
+  width: 100%;
+  height: 100%;
+  display: flex;
+}
+
+.md_video_preview_box {
+  width: calc(var(--video-modal-width) - var(--video-detail-width));
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* border-right: 1px solid #999; */
+}
+
+.md_video_preview {
+  position: relative;
+  border-radius: 10px;
+  overflow: hidden;
+  width: var(--video-preview-width);
+  height: var(--video-preview-height);
+}
+
+.md_thumbnail_box {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* .md_thumbnail_b img{
+      width: 100%;
+      height: 100%;
+  } */
+
+.md_video_preview video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.md_video_detail_box {
+  width: var(--video-detail-width);
+  height: 100%;
+  padding: 15px;
+  overflow-y: scroll;
+}
+
+.md_video_detail_title {
+  width: 100%;
+  height: 130px;
+  border: 1px solid #999;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.md_vd_title_box {
+  width: 100%;
+  height: 30px;
+  display: flex;
+  align-items: center;
+}
+
+.md_vd_title {
+  color: #999;
+  font-size: 14px;
+  margin-left: 6px;
+}
+.md_vd_title_len {
+  font-size: 13px;
+  margin-left: 6px;
+}
+
+.md_vd_title_input {
+  width: 100%;
+  height: 100px;
+  border: none;
+  padding-left: 6px;
+  outline: none;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+/* 비디오 커버송 관련 */
+.md_video_detail_cover_song {
+  margin-top: 15px;
+  width: 100%;
+  height: 35px;
+  display: flex;
+  border: 1px solid #999;
+  align-items: center;
+}
+
+.md_video_detail_cover_song div {
+  height: 100%;
+}
+
+.md_vd_cover_song_input_box {
+  flex: 1;
+  position: relative;
+}
+
+.md_vd_cover_song_recommand {
+  position: absolute;
+  left: 0;
+  top: 35px;
+  width: 100%;
+  background-color: #fff;
+  z-index: 1512;
+  display: flex;
+  border-radius: 10px;
+  overflow: hidden;
+  padding: 10px 0px;
+  border: 1px solid #999;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0md_2);
+  flex-direction: column;
+}
+
+.md_coversong_list {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  height: 40px;
+  cursor: pointer;
+  padding: 0px 10px;
+}
+
+.md_coversong_list:hover {
+  background-color: rgba(0, 0, 0, 0.2);
+}
+
+.md_coversong_image {
+  width: 33px;
+  height: 33px;
+  border-radius: 50%;
+  overflow: hidden;
+  display: inline-block;
+}
+
+.md_coversong_image img {
+  width: 100%;
+  height: 100%;
+}
+
+.md_coversong_title {
+  margin: 0px 12px;
+  min-width: 220px;
+  max-width: 220px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.md_coversong_artists {
+  min-width: 120px;
+  max-width: 120px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.artist_name {
+  font-size: 14px;
+  color: #999;
+}
+
+/* 인풋박스 */
+.md_vd_cover_song_input_box input {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  border: none;
+  outline: none;
+  padding: 0px 12px;
+}
+
+.md_vd_cover_song_search_category {
+  display: flex;
+  align-items: center;
+  position: relative;
+  width: 60px;
+}
+
+.md_coversong_type_btn {
+  width: 100%;
+  height: 100%;
+}
+
+.md_vd_search_type {
+  background-color: #faf8f2;
+  padding: 5px;
+  font-weight: 600;
+  margin: 0px 4px;
+}
+
+.md_cover_search_types_box {
+  position: absolute;
+  top: 35px;
+  left: -50%;
+  z-index: 125;
+  display: flex;
+  width: 120px;
+  flex-direction: column;
+  /* box-shadow: 0 0 2px 1px rgba(0, 0, 0, 0.md_2); */
+}
+
+.md_cover_search_types_box button {
+  height: 45px;
+  background-color: #fff;
+  cursor: pointer;
+  border: none;
+  outline: none;
+  font-weight: 500;
+}
+
+.md_cover_search_types_box button:hover {
+  background-color: var(bcs-light-gray);
+}
+
+.md_vd_search_hide_icon {
+  height: 100%;
+  background-color: #fff;
+  border: none;
+  outline: none;
+  cursor: pointer;
+}
+
+.md_vd_cover_song_clear_btn {
+  height: 100%;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  font-size: 16px;
+  width: 40px;
+  background-color: #fff;
+}
+
+/* 공개여부 */
+.md_vd_release_choice {
+  margin-top: 25px;
+  width: 100%;
+}
+
+.md_vd_release_text {
+  font-size: 18px;
+  font-weight: 600;
+  color: #000;
+  margin-bottom: 15px;
+}
+
+.md_release_on,
+.md_release_no {
+  display: flex;
+  align-items: center;
+  margin: 8px 0px;
+  width: 100%;
+}
+
+.md_release_radio {
+  border: 1px solid black;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  margin-right: 15px;
+}
+
+.md_release_intro {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.md_release,
+.md_norelease {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 5px;
+}
+
+/* 밑부분 */
+.md_video_bottom_section {
+  border-top: 1px solid black;
+  border: 1px solid red;
+  width: 100%;
+  height: var(--video-modal-bottomHeight);
+  line-height: var(--video-modal-bottomHeight);
+  text-align: end;
+}
+
+.md_video_upload_btn {
+  padding: 8px 15px;
+  font-size: 17px;
+  border-radius: 10px;
+  background-color: var(--bcs-light-blue);
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+  margin-right: 10px;
+  outline: none;
+  border: var(--bcs-light-blue);
+}
+
+.md_video_upload_btn:hover {
+  background-color: var(--bcs-deep-blue);
+}
+
+.zero {
+  display: none;
+}

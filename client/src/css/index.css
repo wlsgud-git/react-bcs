@@ -1,0 +1,69 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  /* color */
+  --bcs-signiture-color: #2e91ee;
+  --bcs-white: #fff;
+  --bcs-black: #000;
+  --bcs-gray: #999;
+
+  --bcs-light-blue: #2e91ee;
+  --bcs-deep-blue: #0084ff;
+
+  --bcs-light-gray: rgba(0, 0, 0, 0.05);
+  --bcs-deep-gray: rgba(0, 0, 0, 0.25);
+
+  --naver-color: #00c73c;
+  --kakao-color: #fee500;
+}
+
+a {
+  text-decoration: none;
+  color: var(--bcs-black);
+}
+
+li {
+  list-style: none;
+}
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+    monospace;
+}
+
+.pages {
+  position: absolute;
+  top: var(--nav-height);
+  left: var(--sidemenu-width);
+  min-width: calc(100% - var(--sidemenu-width));
+  min-height: calc(100% - var(--nav-height));
+  /* border: 1px solid black; */
+}
+
+.Loading_container {
+  width: 100%;
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 1231410;
+  min-height: 100vh;
+  background-color: rgb(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

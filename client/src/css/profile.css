@@ -1,0 +1,107 @@
+:root {
+  --profile-user-container-height: 250px;
+  --profile-user-container-padding: 40px;
+}
+
+.profile_user_container {
+  width: 100%;
+  height: var(--profile-user-container-height);
+  padding: var(--profile-user-container-padding);
+  display: flex;
+}
+
+.profile_user_thumbnail_container {
+  width: calc(
+    var(--profile-user-container-height) - var(--profile-user-container-padding)
+  );
+  height: 100%;
+}
+
+.profile_user_thumb_circle {
+  display: inline-block;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+.profile_user_thumb_circle img {
+  width: 100%;
+  height: 100%;
+}
+
+.profile_user_info_container {
+  flex: 1;
+  height: 100%;
+  margin-left: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+/* 유저 닉네임과 버튼 */
+.profile_user_nickname {
+  font-size: 20px;
+  font-weight: 400;
+}
+
+.profile_edit_btn {
+  font-size: 15px;
+  padding: 5px;
+  margin-left: 10px;
+  background-color: var(--bcs-white);
+  border: 1px solid var(--bcs-light-gray);
+  cursor: pointer;
+}
+
+.profile_edit_btn:hover {
+  background-color: var(--bcs-light-gray);
+}
+
+/* 유저이름 */
+.profile_user_info_two span {
+  color: var(--bcs-gray);
+}
+
+.profile_user_info_three {
+  display: flex;
+  margin: 30px 0px;
+}
+
+.profile_user_info_three div {
+  display: flex;
+  cursor: pointer;
+  margin-right: 8px;
+}
+
+.profile_user_info_three div:hover {
+  color: var(--bcs-gray);
+}
+
+.profile_user_info_three div span {
+  font-size: 16px;
+  margin: 0px 1px;
+}
+
+/* 유저 컨텐츠 */
+.user_content_container {
+  width: 100%;
+  min-height: 300px;
+  border: 1px solid green;
+}
+
+.user_content_type {
+  width: 100%;
+  display: flex;
+  border-bottom: 1px solid var(--bcs-light-gray);
+}
+
+.user_content_type li {
+  padding: 8px 12px;
+  font-size: 18px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.user_content_type li:hover {
+  border-bottom: 2px solid black;
+}

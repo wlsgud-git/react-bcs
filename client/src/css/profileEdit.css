@@ -1,0 +1,120 @@
+:root {
+  --profile-edit-modal-width: 460px;
+  --profile-edit-modal-height: 520px;
+
+  --profile-edit-modal-bottom-height: 60px;
+}
+
+.profile_edit_modal {
+  position: relative;
+  width: var(--profile-edit-modal-width);
+  height: var(--profile-edit-modal-height);
+  background-color: #fff;
+  border-radius: 5px;
+  display: none;
+  flex-direction: column;
+}
+
+.pem_top_section {
+  width: 100%;
+  min-height: var(--video-modal-topHeight);
+  display: flex;
+  padding: 0px 15px;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 18px;
+  font-weight: 600;
+  border-bottom: 1px solid black;
+}
+
+.pem_text {
+  color: var(--bcs-black);
+}
+
+.pem_modal_close {
+  color: red;
+  cursor: pointer;
+}
+
+.pem_profile_modify_container {
+  width: 100%;
+  height: calc(
+    var(--profile-edit-modal-height) - var(--profile-edit-modal-bottom-height) -
+      var(--video-modal-topHeight)
+  );
+}
+
+.pem_form {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+}
+
+.pem_thumbnail_container {
+  width: 100%;
+  /* border: 1px solid green; */
+  height: 150px;
+  display: flex;
+  align-items: center;
+  overflow: auto;
+}
+
+.pem_thumbnail_circle {
+  width: 120px;
+  border-radius: 50%;
+  height: 120px;
+  margin: 0 auto;
+  border: 1px solid black;
+  overflow: hidden;
+}
+
+.pem_thumbnail_circle img {
+  width: 100%;
+  height: 100%;
+}
+
+.pem_editbox {
+  /* border: 1px solid blue; */
+  width: 70%;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 10px;
+}
+
+.pem_edit_label {
+  font-size: 17px;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+.pem_editbox input {
+  padding: 12px 12px;
+  border: none;
+  outline: none;
+  border-radius: 5px;
+  background-color: var(--bcs-light-gray);
+}
+
+.pem_bottom {
+  width: 100%;
+  padding: 0px 10px;
+  height: var(--profile-edit-modal-bottom-height);
+  display: flex;
+  align-items: center;
+  border-top: 1px solid var(--bcs-light-gray);
+  justify-content: flex-end;
+}
+
+.pem_modify_btn {
+  padding: 8px;
+  font-size: 18px;
+  background-color: var(--bcs-signiture-color);
+  border: none;
+  outline: none;
+  cursor: pointer;
+  font-weight: 600;
+  border-radius: 10px;
+  color: var(--bcs-white);
+}

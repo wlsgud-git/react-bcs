@@ -1,0 +1,21 @@
+:root {
+  /* 로그인 모달 관련 */
+  --login-modal-width: 352px;
+  --login-modal-height: 26rem;
+
+  /* 회원가입 모달 관련 */
+}
+
+.modal_wrap {
+  position: fixed;
+  top: 0;
+  left: 0;
+  min-width: 100%;
+  min-height: 100vh;
+  height: 100%;
+  z-index: 12312514;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: none;
+  align-items: center;
+  justify-content: center;
+}

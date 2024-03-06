@@ -1,0 +1,14 @@
+.song_video_lists {
+  width: 100%;
+  overflow-x: hidden;
+  /* display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center; */
+}
+
+.bcs_lsize_video_li {
+  width: 95%;
+  margin: 0 auto;
+  height: var(--bcs-song-video-container-height);
+}
