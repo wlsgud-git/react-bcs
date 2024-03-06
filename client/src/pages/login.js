@@ -73,7 +73,7 @@ export function Login({ login }) {
           <div className="divide_line"></div>
         </div>
 
-        <div className="err_box"></div>
+        <div className="err_box"> asd </div>
 
         {/* 로그인 정보입력 */}
         <div className="login_info_box">
