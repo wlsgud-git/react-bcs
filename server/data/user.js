@@ -6,6 +6,9 @@ export async function GetUserByEmail(email) {
     select 
       us.id,
 	    us.email,
+      us.name,
+      us.nickname,
+      us.description,
 	    us.profile_image_url,
 		
 		  json_object_agg(case when fo.follower_id is null then 'null' else fo.follower_id end, true) as following
@@ -33,6 +36,39 @@ export async function GetPassWordByEmail(email) {
   }
 }
 
+export async function GetUserDetailInfo(email) {
+  try {
+    let query = `
+    select
+      us.id,
+	    us.email,
+	    us.name,
+	    us.nickname,
+	    us.profile_image_url,
+      us.description,
+	
+	    count(distinct fo.following_id) as follower_count,
+	    count(distinct f.follower_id) as following_count,
+	
+	    json_agg(distinct jsonb_build_object(
+	       'id', vd.id,
+	       'title', vd.title,
+	       'video_url' , vd.video_url
+	    )) as my_video
+	
+    from users as us 
+    left join follows as f on us.id = f.following_id
+    left join follows as fo on us.id = fo.follower_id
+    left join videos as vd on us.id = vd.writer_id 
+    where us.email = $1
+    group by us.id`;
+    const data = [email];
+    return DbPlay(query, data);
+  } catch (err) {
+    throw err;
+  }
+}
+
 export async function CreatUser(info) {
   try {
     const { id, email, password, company } = info;
@@ -45,10 +81,23 @@ export async function CreatUser(info) {
   }
 }
 
-export async function ModifyUser(info) {
+export async function ModifyUser(email, info) {
+  let count = 0;
+  let floor = ["name", "nickname", "description"];
+  let mo = info
+    .map((val, idx) => {
+      if (val) {
+        count += 1;
+        return `${floor[idx]}=$${count}`;
+      }
+    })
+    .filter((val) => val);
   try {
-    const query = "";
-    const data = [];
+    const query = `update users set ${mo.join(",").toString()} where email=$${(
+      mo.length + 1
+    ).toString()}`;
+    const data = info.filter((val) => val);
+    data.push(email);
     return await DbPlay(query, data);
   } catch (err) {
     throw err;

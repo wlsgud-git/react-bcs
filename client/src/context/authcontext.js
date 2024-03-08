@@ -37,7 +37,7 @@ export function AuthProvider({ authService, children }) {
   useEffect(() => {
     authService
       .csrftoken()
-      .then((data)=> Setcsrftoken(data.data.csrftoken))
+      .then((data) => Setcsrftoken(data.data.csrftoken))
       .catch((err) => console.log(err));
   }, [authService]);
 

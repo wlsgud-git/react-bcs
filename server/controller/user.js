@@ -2,12 +2,15 @@ import {
   FollowModify,
   GetPassWordByEmail,
   GetUserByEmail,
+  GetUserDetailInfo,
+  ModifyUser,
 } from "../data/user.js";
 import { CookieSetToken, Oauth } from "../middleware/auth.js";
 import { Bcrypt, Jwt } from "../middleware/secure.js";
 import { DateControl } from "../middleware/time.js";
 import { CreatUser } from "../data/user.js";
 
+// user control
 export async function SocialLoginCallback(req, res) {
   try {
     const b = new Bcrypt();
@@ -54,7 +57,7 @@ export async function SocialLoginCallback(req, res) {
 
     CookieSetToken(res, { key: "b_id", token: c_tokens["access_token"] });
     CookieSetToken(res, { key: "b_rt_id", token: c_tokens["refresh_token"] });
-    CookieSetToken(res, { key: "bcs-com", token: c_tokens["company"] } );
+    CookieSetToken(res, { key: "bcs-com", token: c_tokens["company"] });
 
     // if (user_info.status == 400)
     //   return res.status(400).json({ error: user_info.error });
@@ -84,6 +87,37 @@ export async function CurrentUser(req, res) {
   }
 }
 
+export async function UserModify(req, res) {
+  try {
+    let email = req.params.email;
+
+    let info = [];
+    // req.file ? info['profile'] = req.
+    info.push(req.body.name);
+    info.push(req.body.nickname);
+    info.push(req.body.description);
+
+    await ModifyUser(email, info);
+
+    return res.status(200).json({ shibal: "shibal" });
+  } catch (err) {
+    console.log(err);
+    return res.status(400).json({ err: "err" });
+  }
+}
+
+export async function UserDetail(req, res) {
+  try {
+    let email = req.param("email");
+    let data = await GetUserDetailInfo(email);
+    let user_info = data.data[0];
+    return res.status(200).json({ user_info });
+  } catch (err) {
+    return res.status(400).json({ err: err });
+  }
+}
+
+// login
 export async function Login(req, res) {
   try {
     let b = new Bcrypt();

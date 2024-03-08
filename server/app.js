@@ -23,7 +23,7 @@ const corsOption = {
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(cookieParser());
-app.use(CsrfVerify);
+// app.use(CsrfVerify);
 app.use(cors(corsOption));
 app.use(express.static(path.join(__dirname, "../client/build")));
 

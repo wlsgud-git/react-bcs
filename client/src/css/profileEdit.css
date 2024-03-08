@@ -60,11 +60,40 @@
   overflow: auto;
 }
 
-.pem_thumbnail_circle {
+.pem_thumbnail_box {
+  position: relative;
   width: 120px;
-  border-radius: 50%;
   height: 120px;
   margin: 0 auto;
+}
+
+.profile_change_button {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  opacity: 0;
+  z-index: 12415;
+  outline: none;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  background-color: rgba(0, 0, 0, 0.2);
+}
+
+.profile_change_button:hover {
+  opacity: 1;
+}
+
+.pem_thumbnail_circle {
+  width: 100%;
+  display: inline-block;
+  height: 100%;
+  border-radius: 50%;
   border: 1px solid black;
   overflow: hidden;
 }

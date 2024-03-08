@@ -28,9 +28,9 @@ export function Login({ login }) {
 
   async function SocialLogin(com) {
     if (com == "kakao") {
-      window.location = `https://kauth.kakao.com/oauth/authorize?client_id=${"3569b5484b0ff4805fca3466c7c82986"}&redirect_uri=${"http://localhost:8000/callback"}&response_type=code`;
+      window.location = `https://kauth.kakao.com/oauth/authorize?client_id=${process.env.REACT_APP_KAKAO_REST}&redirect_uri=${process.env.REACT_APP_REDIRECT_URL}&response_type=code`;
     } else {
-      window.location = `https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=LhTeNmH6tTBMndE2xySu&state=STATE_STRING&redirect_uri=http://localhost:8000/callback`;
+      window.location = `https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=${process.env.REACT_APP_NAVER_CLIENT}&state=STATE_STRING&redirect_uri=${process.env.REACT_APP_REDIRECT_URL}`;
     }
   }
 

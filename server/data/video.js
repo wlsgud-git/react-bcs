@@ -13,20 +13,20 @@ export async function GetVideos() {
 	      vd.create_at,
 	      vd.release,
 	
-	      json_agg(json_build_object(
+	      json_agg(distinct jsonb_build_object(
 	         'id', us.id,
 	         'email', us.email,
 	         'nickname', us.nickname,
 	         'profile_image_url', us.profile_image_url
 	      )) as oner,
 	
-	      json_agg(json_build_object(
+	      json_agg(distinct jsonb_build_object(
 	        'id', cs.id,
 		      'title', cs.title,
 		      'thumbnail_url', cs.thumbnail_url
 	      )) as coversong_info,
 		  
-		  json_agg(json_build_object(
+		  json_agg(distinct jsonb_build_object(
           'id', co.id,
 	        'user_id', u.id,
 			    'nickname', u.nickname,

@@ -77,8 +77,11 @@ export function App({ videoService, commentService }) {
 
           <Route path="/coversong/:id" element={<Coversong />}></Route>
           <Route path="/about/:id" element={<About />}></Route>
+          <Route
+            path="/profile/:email"
+            element={<Profile modalControl={modalControl} />}
+          ></Route>
           <Route path="/results" element={<Results />}></Route>
-          <Route path="/profile/:email" element={<Profile />}></Route>
         </Routes>
       </Suspense>
     </Router>

@@ -7,6 +7,19 @@ export class AuthService {
     return this.http.fetching("/current", { method: "get" });
   }
 
+  async detailUser(email) {
+    return this.http.fetching(`/user_detail/${email}`, {
+      method: "get",
+    });
+  }
+
+  async modifyUser(email, info) {
+    return this.http.fetching(`/user/${email}`, {
+      method: "put",
+      body: JSON.stringify({ hi: "hi" }),
+    });
+  }
+
   async login(email, password) {
     return this.http.fetching("/login", {
       method: "post",

@@ -33,6 +33,7 @@ export function Modal({
         modalControl={modalControl}
       />
       <ProfileEdit
+        user={user}
         IsmodalOpen={IsmodalOpen}
         aboutModal={aboutModal}
         modalControl={modalControl}

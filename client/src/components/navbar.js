@@ -7,7 +7,7 @@ import Logo from "../image/BCS-01.png";
 import { useAuth } from "../context/authcontext.js";
 
 export function Navbar() {
-  const { user, logout, login, modalControl } = useAuth();
+  const { user, logout, modalControl } = useAuth();
   const profilego = useRef(null);
 
   const [userDetailbox, SetuserDetailbox] = useState(false);
@@ -77,7 +77,7 @@ export function Navbar() {
                   onFocus={() => SetuserDetailbox(true)}
                   onBlur={() => SetuserDetailbox(false)}
                 >
-                  <img src={user.profile_image_url} />
+                  <img src={user ? user.profile_image_url : ""} />
                 </button>
 
                 <div
@@ -88,7 +88,7 @@ export function Navbar() {
                     <div onMouseDown={() => profilego.current.click()}>
                       <Link
                         ref={profilego}
-                        to={`/profile/${user.email}`}
+                        to={`/profile/${user ? user.email : undefined}`}
                         className="my_profile_redirect"
                       >
                         <i className="fa-regular fa-user"></i>
