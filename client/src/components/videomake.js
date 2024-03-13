@@ -61,17 +61,22 @@ export function Videomake({
     formData.append("release", release);
     formData.append("user_id", user.id);
 
+    // await videoService
+    //   .createVideo(formData)
+    //   .then((data) => console.log(data))
+    //   .catch((err) => console.log(err));
     const res = await fetch(`http://localhost:8000/video`, {
       method: "post",
       body: formData,
       headers: {
+        'Content-type': 'multipart/form-data',
         Accept: "application/json",
       },
       credentials: "include",
     });
 
-    const status = await res.status;
-    const data = await res.json();
+    // const status = await res.status;
+    // const data = await res.json();
   }
 
   async function Coversongs(e) {

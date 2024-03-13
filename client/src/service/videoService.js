@@ -8,9 +8,11 @@ export class VideoService {
   }
 
   async createVideo(data) {
+    // console.log("hi");
     return this.http.fetching("/video", {
       method: "post",
-      body: JSON.stringify(data),
+      body: data,
+      // JSON.stringify({ hi: "hi" })
     });
   }
 

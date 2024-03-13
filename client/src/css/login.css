@@ -111,7 +111,9 @@
 .err_box {
   width: 100%;
   text-align: center;
-  background-color: red;
+  color: red;
+  font-size: 14px;
+  font-weight: 400;
 }
 
 /* 로그인 정보입력 부분 */

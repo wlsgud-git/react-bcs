@@ -26,47 +26,44 @@ export function AuthProvider({ authService, children }) {
     authService
       .current()
       .then((data) => {
-        if (data.status == 200) {
-          SetUser(data.data.user);
-          SetMyfollowing(data.data.user.following);
-        }
+        SetUser(data.user);
+        SetMyfollowing(data.user.following);
       })
-      .catch();
+      .catch((err) => {});
   }, [authService]);
 
   useEffect(() => {
     authService
       .csrftoken()
-      .then((data) => Setcsrftoken(data.data.csrftoken))
+      .then((data) => Setcsrftoken(data.csrftoken))
       .catch((err) => console.log(err));
   }, [authService]);
 
   useEffect(() => {}, [authService]);
 
   const login = useCallback(
-    async (email, password) =>
-      authService.login(email, password).then((data) => {
-        return data;
-      }),
+    async (email, password) => authService.login(email, password),
     [authService]
   );
 
   const signup = useCallback(
     async (email, password, otpnum) =>
-      authService.signup(email, password, otpnum).then(),
+      authService.signup(email, password, otpnum).then((data) => data),
     [authService]
   );
 
   const logout = useCallback(
-    async () => authService.logout().then((data) => (window.location = "/")),
+    async () =>
+      authService
+        .logout()
+        .then((data) => (window.location = process.env.REACT_APP_SERVEPORT))
+        .catch((err) => console.log(err)),
     [authService]
   );
 
   const signupValid = useCallback(
     async (email, password, password_check) =>
-      authService.signupValid(email, password, password_check).then((data) => {
-        return data;
-      }),
+      authService.signupValid(email, password, password_check),
     [authService]
   );
 

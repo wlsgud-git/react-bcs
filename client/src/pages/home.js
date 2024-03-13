@@ -14,7 +14,7 @@ export function Home({ Myfollowing, videoService, commentService }) {
     videoService
       .getVideo()
       .then((data) => {
-        Setvideolist(data.data.videos);
+        Setvideolist(data.videos);
       })
       .catch((err) => console.log(err));
   }, []);

@@ -18,6 +18,7 @@ import { Profile } from "./pages/profile.js";
 import { Login } from "./pages/login.js";
 import { Signup } from "./pages/signup.js";
 import { Coversong } from "./pages/coversong.js";
+import { Notfound } from "./pages/notfound.js";
 
 import { useAuth } from "./context/authcontext.js";
 
@@ -82,6 +83,7 @@ export function App({ videoService, commentService }) {
             element={<Profile modalControl={modalControl} />}
           ></Route>
           <Route path="/results" element={<Results />}></Route>
+          <Route path={"*"} element={<Notfound/>}></Route>
         </Routes>
       </Suspense>
     </Router>

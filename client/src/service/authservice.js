@@ -47,50 +47,39 @@ export class AuthService {
     return token;
   }
 
-  async signupValid(email, password, password_check) {
-    // let emailValid = this.checkEmail(email);
-    // let passwordValid = this.passwordValid(password);
-    // if (!emailValid.state) {
-    //   return { status: 400, message: emailValid.message };
-    // }
-    // if (!passwordValid.state) {
-    //   return { status: 400, message: passwordValid.message };
-    // }
-
-    // if (password_check !== password) {
-    //   return {
-    //     status: 400,
-    //     message: "비밀번호 확인값이 비밀번호와 같지 않습니다",
-    //   };
-    // }
-
-    const check = await this.http.fetching("/signup_valid", {
-      method: "post",
-      body: JSON.stringify({ email, password, password_check }),
-    });
-
-    if (check.status == 200) {
-      return { status: 200, message: check.data.message };
-    }
-    return { status: 400, error: check.data.errors[0].msg };
-  }
-
-  async sendEmailOtp(email) {
-    return this.http.fetching("/email_otp", {
-      method: "post",
-      body: JSON.stringify({ email }),
-    });
-  }
-
-  // checkEmail(value) {
-  //   let email = value;
-  //   let ErrorMessage = "이메일 형식이 올바르지 않습니다";
-  //   let emailregex = /^[A-Za-z0-9_\.\-]+@[A-Za-z0-9\-]+\.[A-Za-z0-9\-]+/;
-  //   if (emailregex.test(email) == false) {
-  //     return { state: false, message: ErrorMessage };
-  //   }
-  //   return { state: true };
+  // async sendEmailOtp(email) {
+  //   return this.http.fetching("/email_otp", {
+  //     method: "post",
+  //     body: JSON.stringify({ email }),
+  //   });
   // }
+
+  async signupValid(email, password, password_check) {
+    try {
+      this.checkEmail(email);
+      this.passwordValid(password);
+      this.passwordCheckValid(password, password_check);
+
+      const check = await this.http.fetching("/signup_valid", {
+        method: "post",
+        body: JSON.stringify({ email, password, password_check }),
+      });
+
+      // if (check.status == 400) {
+      //   throw new Error("이미 가입된 이메일입니다");
+      // }
+    } catch (err) {
+      throw new Error(err);
+    }
+  }
+
+  checkEmail(value) {
+    let email = value;
+    let ErrorMessage = "이메일 형식이 올바르지 않습니다";
+    let emailregex = /^[A-Za-z0-9_\.\-]+@[A-Za-z0-9\-]+\.[A-Za-z0-9\-]+/;
+    if (emailregex.test(email) == false) throw new Error(ErrorMessage);
+    return true;
+  }
 
   passwordValid(value) {
     let password = value;
@@ -103,12 +92,18 @@ export class AuthService {
       /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,20}$/;
 
     if (password < minLength || password > maxLength) {
-      return { state: false, message: ErrorMessage };
+      throw new Error(ErrorMessage);
     }
 
     if (!passwordRegex.test(password)) {
-      return { state: false, message: ErrorMessage };
+      throw new Error(ErrorMessage);
     }
-    return { state: true };
+    return true;
+  }
+
+  passwordCheckValid(val1, val2) {
+    if (val1 != val2)
+      throw new Error("비밀번호 값과 비밀번호 확인 값이 다릅니다");
+    return;
   }
 }

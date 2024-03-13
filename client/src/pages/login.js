@@ -9,21 +9,36 @@ import KakaoIco from "../image/kakaoico.png";
 import NaverIco from "../image/naverico.png";
 
 export function Login({ login }) {
-  const [logining, Setlogining] = useState(false);
-  const [email, Setemail] = useState("");
-  const [password, Setpassword] = useState("");
+  const [loginInfo, SetloginInfo] = useState({
+    email: "",
+    password: "",
+    iserror: false,
+    errorMessage: "",
+    isLoading: false,
+  });
 
   async function SubmitHandle(e) {
     e.preventDefault();
 
-    // Setlogining(true);
-    let log = await login(email, password).catch((err) => console.log("sibal"));
-
-    if (log.status == 200) {
-      window.location = "/";
-    } else {
-      console.log("로그인 정보가 올바르지 않음");
-    }
+    SetloginInfo((c) => ({ isLoading: true }));
+    await login(loginInfo.email, loginInfo.password)
+      .then((data) => {
+        SetloginInfo((c) => ({
+          ...c,
+          iserror: false,
+          errorMessage: "",
+          isLoading: false,
+        }));
+        window.location = process.env.REACT_APP_SERVEPORT;
+      })
+      .catch((err) => {
+        SetloginInfo((c) => ({
+          ...c,
+          iserror: true,
+          errorMessage: err.message,
+          isLoading: false,
+        }));
+      });
   }
 
   async function SocialLogin(com) {
@@ -73,7 +88,12 @@ export function Login({ login }) {
           <div className="divide_line"></div>
         </div>
 
-        <div className="err_box"> asd </div>
+        <div
+          className="err_box"
+          style={{ display: loginInfo.iserror ? "block" : "none" }}
+        >
+          {loginInfo.iserror && loginInfo.errorMessage}
+        </div>
 
         {/* 로그인 정보입력 */}
         <div className="login_info_box">
@@ -82,17 +102,27 @@ export function Login({ login }) {
               <input
                 type="email"
                 placeholder="이메일"
-                onChange={(e) => Setemail(e.target.value)}
+                value={loginInfo.email}
+                onChange={(e) =>
+                  SetloginInfo((c) => ({ ...c, email: e.target.value }))
+                }
               />
               <input
                 type="password"
                 placeholder="비밀번호"
-                onChange={(e) => Setpassword(e.target.value)}
+                value={loginInfo.password}
+                onChange={(e) =>
+                  SetloginInfo((c) => ({ ...c, password: e.target.value }))
+                }
               />
             </div>
             <div className="login_submit_btn">
-              <button className="login_btn" disabled={logining}>
-                로그인
+              <button
+                className="login_btn"
+                disabled={loginInfo.isLoading}
+                // style
+              >
+                {loginInfo.isLoading ? "..." : "로그인"}
               </button>
             </div>
           </form>
