@@ -48,7 +48,7 @@ export function AuthProvider({ authService, children }) {
 
   const signup = useCallback(
     async (email, password, otpnum) =>
-      authService.signup(email, password, otpnum).then((data) => data),
+      authService.signup(email, password, otpnum),
     [authService]
   );
 
@@ -67,11 +67,8 @@ export function AuthProvider({ authService, children }) {
     [authService]
   );
 
-  const sendEmailOtp = useCallback(
-    async (email) =>
-      authService.sendEmailOtp(email).then((data) => {
-        return data;
-      }),
+  const otpRenew = useCallback(
+    async (email) => authService.otpRenew(email),
     [authService]
   );
 
@@ -101,7 +98,7 @@ export function AuthProvider({ authService, children }) {
       Myfollowing,
 
       signupValid,
-      sendEmailOtp,
+      otpRenew,
 
       IsmodalOpen,
       aboutModal,

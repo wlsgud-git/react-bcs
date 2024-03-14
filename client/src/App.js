@@ -29,7 +29,7 @@ export function App({ videoService, commentService }) {
     signup,
     Myfollowing,
     signupValid,
-    sendEmailOtp,
+    otpRenew,
     IsmodalOpen,
     aboutModal,
     modalControl,
@@ -68,7 +68,7 @@ export function App({ videoService, commentService }) {
                 <Signup
                   signup={signup}
                   signupValid={signupValid}
-                  sendEmailOtp={sendEmailOtp}
+                  otpRenew={otpRenew}
                 />
               ) : (
                 <Navigate to="/" />
@@ -83,7 +83,7 @@ export function App({ videoService, commentService }) {
             element={<Profile modalControl={modalControl} />}
           ></Route>
           <Route path="/results" element={<Results />}></Route>
-          <Route path={"*"} element={<Notfound/>}></Route>
+          <Route path={"*"} element={<Notfound />}></Route>
         </Routes>
       </Suspense>
     </Router>

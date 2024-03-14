@@ -4,45 +4,41 @@ const router = express.Router();
 
 // middleware
 import {
-  EmailOtpVerify,
+  emailOtpVerify,
   IsAuth,
-  SendmailOtpWithEmail,
-  SignupValidation,
-  GetCsrfToken,
+  sendOtpWithEmail,
+  signupValidation,
+  getCsrftoken,
 } from "../middleware/auth.js";
 // controller
 import {
-  CurrentUser,
-  Login,
-  Signup,
-  Logout,
-  FollowControl,
-  SocialLoginCallback,
-  UserDetail,
-  UserModify,
+  currentUser,
+  login,
+  signup,
+  logout,
+  socialLoginCallback,
+  userModify,
+  userDetail,
 } from "../controller/user.js";
 
-import { upload } from "../middleware/variable.js";
+import { upload } from "../utils/variable.js";
 
 // current user
-router.get("/current", IsAuth, CurrentUser);
-router.get("/csrftoken", GetCsrfToken);
-router.get("/user_detail/:email", UserDetail);
-router.put("/user/:email", upload.single("profile_image"), UserModify);
+router.get("/current", IsAuth, currentUser);
+router.get("/csrftoken", getCsrftoken);
+router.get("/user_detail/:email", userDetail);
+router.put("/user/:email", upload.single("profile_image"), userModify);
 // router.delete('/user:id', IsAuth)
 
 // user login
-router.get("/callback", SocialLoginCallback);
-router.post("/login", Login);
-router.post("/signup", EmailOtpVerify, Signup);
-router.post("/logout", IsAuth, Logout);
-router.post("/signup_valid", SignupValidation(), (req, res) => {
-  return res.status(200).json({ message: "h" });
-});
+router.get("/callback", socialLoginCallback);
+router.post("/login", login);
+router.post("/signup", emailOtpVerify, signup);
+router.post("/logout", logout);
+router.post("/signup_valid", signupValidation(), sendOtpWithEmail);
 
 // user otp verify
-router.post("/email_otp", SendmailOtpWithEmail);
-
-router.post("/follow", FollowControl);
+// router.post("/email_otp", sendOtpWithEmail);
+router.post("/otp_renew", sendOtpWithEmail);
 
 export default router;

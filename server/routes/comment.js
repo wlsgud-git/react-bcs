@@ -3,19 +3,21 @@ import express from "express";
 // middleware
 // controller
 import {
-  GetComments,
-  CreateComment,
-  ModifyComment,
-  DeleteComment,
+  getComments,
+  createComment,
+  modifyComment,
+  deleteComment,
 } from "../controller/comment.js";
 
 const router = express.Router();
 
-router.get("/comments", GetComments);
-router.post("/comment", CreateComment);
-
-router.put("/comment/:id", ModifyComment);
-
-router.delete("/comment/:id", DeleteComment);
+// get
+router.get("/comments", getComments);
+// post
+router.post("/comment", createComment);
+// put
+router.put("/comment/:id", modifyComment);
+// delete
+router.delete("/comment/:id", deleteComment);
 
 export default router;

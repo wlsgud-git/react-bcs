@@ -20,16 +20,16 @@ export function Login({ login }) {
   async function SubmitHandle(e) {
     e.preventDefault();
 
-    SetloginInfo((c) => ({ isLoading: true }));
+    SetloginInfo((c) => ({ ...c, isLoading: true, iserror: false }));
     await login(loginInfo.email, loginInfo.password)
       .then((data) => {
+        window.location = process.env.REACT_APP_SERVEPORT;
         SetloginInfo((c) => ({
           ...c,
           iserror: false,
           errorMessage: "",
           isLoading: false,
         }));
-        window.location = process.env.REACT_APP_SERVEPORT;
       })
       .catch((err) => {
         SetloginInfo((c) => ({

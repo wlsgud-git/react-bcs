@@ -27,6 +27,7 @@ export const config = {
   nodemailer: {
     email: required("NODEMAILER_EMAIL"),
     password: required("NODEMAILER_PASSWORD"),
+    port: required("NODEMAILER_PORT"),
   },
 
   naver: {

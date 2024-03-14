@@ -47,30 +47,30 @@ export class AuthService {
     return token;
   }
 
-  // async sendEmailOtp(email) {
-  //   return this.http.fetching("/email_otp", {
-  //     method: "post",
-  //     body: JSON.stringify({ email }),
-  //   });
-  // }
+  async otpRenew(email) {
+    return this.http.fetching("/otp_renew", {
+      method: "post",
+      body: JSON.stringify({ email }),
+    });
+  }
 
   async signupValid(email, password, password_check) {
-    try {
-      this.checkEmail(email);
-      this.passwordValid(password);
-      this.passwordCheckValid(password, password_check);
+    // try {
+    this.checkEmail(email);
+    this.passwordValid(password);
+    this.passwordCheckValid(password, password_check);
 
-      const check = await this.http.fetching("/signup_valid", {
-        method: "post",
-        body: JSON.stringify({ email, password, password_check }),
-      });
+    return this.http.fetching("/signup_valid", {
+      method: "post",
+      body: JSON.stringify({ email, password, password_check }),
+    });
 
-      // if (check.status == 400) {
-      //   throw new Error("이미 가입된 이메일입니다");
-      // }
-    } catch (err) {
-      throw new Error(err);
-    }
+    // if (check.status == 400) {
+    //   throw new Error("이미 가입된 이메일입니다");
+    // }
+    // } catch (err) {
+    //   throw new Error(err);
+    // }
   }
 
   checkEmail(value) {

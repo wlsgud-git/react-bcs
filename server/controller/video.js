@@ -1,8 +1,11 @@
 import axios from "axios";
 import qs from "qs";
-import { config } from "../config.js";
 
-import { GetVideos } from "../data/video.js";
+import { config } from "../config.js";
+import { video_db } from "../data/video.js";
+import { fjwt, fbcrypt } from "../utils/secure.js";
+import { date } from "../utils/date.js";
+import { videoS3 } from "../utils/video.js";
 
 async function getToken() {
   const result = await axios({
@@ -21,7 +24,7 @@ async function getToken() {
   return result.data.access_token;
 }
 
-export async function SearchCoverSong(req, res) {
+export async function searchCoversong(req, res) {
   try {
     const { query } = req.body;
 
@@ -48,12 +51,39 @@ export async function SearchCoverSong(req, res) {
   }
 }
 
-export async function GetVideoList(req, res) {
+export async function getVideolist(req, res) {
   try {
-    let list = await GetVideos();
-    let videos = await list.data;
+    let videos = await video_db.getVideos();
     return res.status(200).json({ videos });
   } catch (err) {
     return res.status(400).json({ err: "err!" });
+  }
+}
+
+export async function createVideo(req, res) {
+  try {
+    console.log("여기 옴")
+    // const { title, coversong, release, user_id } = req.body;
+    // let coversong_info = JSON.parse(coversong);
+
+    // let key = await fbcrypt.createHashText(
+    //   `video-${req.file.originalname}-${date.CurrentDateString()}`
+    // );
+    // let video_url = await videoS3.S3videoUpload({ key, file: req.file });
+
+    // let info = {
+    //   id: key,
+    //   writer_id: user_id,
+    //   coversong_id: coversong_info.id,
+    //   title,
+    //   video_url,
+    //   release,
+    // };
+
+    // await video_db.createVideo(info);
+
+    return res.status(200).json({ message: "업로드 완료" });
+  } catch (err) {
+    return res.status(400).json({ err: "에러나옴" });
   }
 }

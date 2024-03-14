@@ -1,22 +1,13 @@
-import {
-  FollowModify,
-  GetPassWordByEmail,
-  GetUserByEmail,
-  GetUserDetailInfo,
-  ModifyUser,
-} from "../data/user.js";
-import { CookieSetToken, Oauth } from "../middleware/auth.js";
-import { Bcrypt, Jwt } from "../middleware/secure.js";
-import { DateControl } from "../middleware/time.js";
-import { CreatUser } from "../data/user.js";
+import { user_db } from "../data/user.js";
+import { fbcrypt, fjwt } from "../utils/secure.js";
+import { date } from "../utils/date.js";
+import { oauth } from "../utils/user.js";
+import { cookieSetToken } from "../middleware/auth.js";
 
 // user control
-export async function SocialLoginCallback(req, res) {
+export async function socialLoginCallback(req, res) {
+  console.log("hi");
   try {
-    const b = new Bcrypt();
-    const t = new DateControl();
-    const auth = new Oauth();
-
     const code = req.query["code"];
     const state = req.query["state"];
 
@@ -24,28 +15,28 @@ export async function SocialLoginCallback(req, res) {
     let c_email;
     let company;
 
+    // 각각 네이버와 카카오 회사에 저장된 유저 정보 불러오기
     if (state) {
-      const { status, data } = await auth.getNaverToken(code, state);
-      const { access_token, refresh_token, token_type, expires_in } = data;
+      const { access_token, refresh_token, token_type, expires_in } =
+        await oauth.naverToken(code, state);
 
-      let user_info = await auth.getNaverUserInfo(access_token);
-      let email = user_info.data.response.email;
+      let user_info = await oauth.naverUserinfo(access_token);
+      let email = user_info.response.email;
 
       c_tokens = { access_token, refresh_token, company: "naver" };
       c_email = email;
       company = "naver";
     } else {
-      let { status, data } = await auth.getKakaoToken(code);
-      const {
+      let {
         access_token,
         token_type,
         refresh_token,
         expires_in,
         scope,
         refresh_token_expires_in,
-      } = data;
+      } = await oauth.kakaoToken(code);
 
-      let user_info = await auth.getKakaoUserInfo(access_token);
+      let user_info = await oauth.kakaoUserinfo(access_token);
       let email = user_info.data.kakao_account.email;
 
       c_tokens = { access_token, refresh_token, company: "kakao" };
@@ -53,23 +44,25 @@ export async function SocialLoginCallback(req, res) {
       company = "kakao";
     }
 
-    // const user_info = await GetUserByEmail(c_email);
+    //데이터 베이스 내에 이메일과 일치하는 정보가 없다면 소셜로그인 진행 (회원가입 + set cookie)
+    // 데이터 베이스 내에 이메일과 일치하는 정보가 있고 회사도 같다면 소셜로그인 진행 (set cookie)
+    // 데이터 베이스 내에 이메일과 일치하는 정보가 있지만 회사가 다르면 소셜로그인 불가 (error)
 
-    CookieSetToken(res, { key: "b_id", token: c_tokens["access_token"] });
-    CookieSetToken(res, { key: "b_rt_id", token: c_tokens["refresh_token"] });
-    CookieSetToken(res, { key: "bcs-com", token: c_tokens["company"] });
+    let data = await user_db.findUserByEmail(c_email);
+    let user = await data[0];
 
-    // if (user_info.status == 400)
-    //   return res.status(400).json({ error: user_info.error });
-    // if (!user_info.data) {
-    //   let hash_id = await b.createHashText(
-    //     `signup-${t.CurrentDateString()}-${c_email}`
-    //   );
-    //   let id = hash_id.hash_text;
-    //   let info = { id, email: c_email, password: "", company };
+    if (!user) {
+      let id = await fbcrypt.createHashText(
+        `user-${c_email}-${date.CurrentDateString()}`
+      );
 
-    //   await CreateUser(info);
-    // }
+      let info = { id, email: c_email, password: "", company };
+      await user_db.creatUser(info);
+    }
+
+    cookieSetToken(res, { key: "b_id", token: c_tokens["access_token"] });
+    cookieSetToken(res, { key: "b_rt_id", token: c_tokens["refresh_token"] });
+    cookieSetToken(res, { key: "bcs-com", token: c_tokens["company"] });
 
     return res.redirect("http://localhost:3000");
   } catch (err) {
@@ -77,27 +70,28 @@ export async function SocialLoginCallback(req, res) {
   }
 }
 
-export async function CurrentUser(req, res) {
+export async function currentUser(req, res) {
   try {
-    const data = await GetUserByEmail(req.email);
-    const user = data.data[0];
+    const data = await user_db.getUserByEmail(req.email);
+    const user = data[0];
     return res.status(200).json({ user });
   } catch (err) {
     return res.status(401).json({ err: "유저 정보가 없습니다" });
   }
 }
 
-export async function UserModify(req, res) {
+export async function userModify(req, res) {
   try {
-    let email = req.params.email;
+    console.log("hi");
+    // let email = req.params.email;
 
-    let info = [];
-    // req.file ? info['profile'] = req.
-    info.push(req.body.name);
-    info.push(req.body.nickname);
-    info.push(req.body.description);
+    // let info = [];
+    // // req.file ? info['profile'] = req.
+    // info.push(req.body.name);
+    // info.push(req.body.nickname);
+    // info.push(req.body.description);
 
-    await ModifyUser(email, info);
+    // await user_db.modifyUser(email, info);
 
     return res.status(200).json({ shibal: "shibal" });
   } catch (err) {
@@ -106,11 +100,11 @@ export async function UserModify(req, res) {
   }
 }
 
-export async function UserDetail(req, res) {
+export async function userDetail(req, res) {
   try {
     let email = req.param("email");
-    let data = await GetUserDetailInfo(email);
-    let user_info = data.data[0];
+    let data = await user_db.getUserDetailInfo(email);
+    let user_info = data[0];
     return res.status(200).json({ user_info });
   } catch (err) {
     return res.status(400).json({ err: err });
@@ -118,84 +112,63 @@ export async function UserDetail(req, res) {
 }
 
 // login
-export async function Login(req, res) {
+export async function login(req, res) {
   try {
-    let b = new Bcrypt();
-    let j = new Jwt();
     const { email, password } = req.body;
 
-    const user_info = await GetPassWordByEmail(email);
-    const user = await user_info.data[0];
+    const user_info = await user_db.getPasswordByEmail(email);
+    const user = await user_info[0];
 
-    if (!user) return res.status(404).json({ err: "존재하지 않는 유저입니다" });
+    if (!user)
+      return res.status(404).json({ message: "존재하지 않는 유저입니다" });
 
     if (user.company == "naver" || user.company == "kakao")
-      return res.status(403).json({ err: "소셜로그인 이용 회원입니다" });
+      return res.status(403).json({ message: "소셜로그인 이용 회원입니다" });
 
-    let compare_password = await b.compareHashes(password, user.password);
+    await fbcrypt.compareHashes(password, user.password);
 
-    let access_token = await j.createAccesstoken(email);
-    let refresh_token = await j.createRefreshtoken(email);
+    let access_token = await fjwt.createAccesstoken(email);
+    let refresh_token = await fjwt.createRefreshtoken(email);
     let company = "bcs";
 
-    CookieSetToken(res, { key: "b_id", token: access_token.access_token });
-    CookieSetToken(res, {
+    cookieSetToken(res, { key: "b_id", token: access_token });
+    cookieSetToken(res, {
       key: "b_rt_id",
-      token: refresh_token.refresh_token,
+      token: refresh_token,
     });
-    CookieSetToken(res, { key: "bcs-com", token: company });
+    cookieSetToken(res, { key: "bcs-com", token: company });
     return res.status(200).json({ message: "로그인 완료" });
   } catch (err) {
-    return res.status(400).json({ err: err });
+    return res.status(400).json({ message: err.message });
   }
 }
 
-export async function Signup(req, res) {
+export async function signup(req, res) {
   try {
-    let b = new Bcrypt();
-    let t = new DateControl();
-
     let body = req.body;
     const email = body.email;
     const password = body.password;
 
-    let hash_password = await b.createHashText(password);
+    let hash_password = await fbcrypt.createHashText(password);
     const company = "bcs";
 
-    let id_hash = await b.createHashText(
-      `user-${t.CurrentDateString()}-${email}`
+    let id = await fbcrypt.createHashText(
+      `user-${email}-${date.CurrentDateString()}`
     );
-    let id = id_hash.hash_text;
 
-    let info = { id, email, password: hash_password.hash_text, company };
-    await CreatUser(info);
+    let info = { id, email, password: hash_password, company };
+    await user_db.creatUser(info);
 
     return res.status(200).json({ message: "회원가입이 완료되었습니다" });
   } catch (err) {
-    return;
+    return res.status(400).json({ message: err.message });
   }
 }
 
-export async function Logout(req, res) {
+export async function logout(req, res) {
   res.clearCookie("b_id");
   res.clearCookie("b_rt_id");
   res.clearCookie("bcs-com");
 
-  return res.status(302).json({ location: "/" });
-}
-
-export async function FollowControl(req, res) {
-  try {
-    let { type, a, b } = req.body;
-
-    let result = await FollowModify(type, a, b);
-
-    res.status(200).json({
-      message: `${
-        type == "add" ? "팔로우 되었습니다" : "팔로우가 취소되었습니다"
-      }`,
-    });
-  } catch (err) {
-    return res.status(400).json({ err: err });
-  }
+  return res.status(200).json({ location: "/" });
 }

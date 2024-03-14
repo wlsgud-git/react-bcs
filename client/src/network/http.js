@@ -27,7 +27,7 @@ export class HttpClient {
       data: body,
       headers: {
         ...headers,
-        "crsf-token": this.getCsrfToken(),
+        "csrf-token": this.getCsrfToken(),
       },
     };
 
@@ -35,9 +35,7 @@ export class HttpClient {
       const res = await this.client(req);
       return res.data;
     } catch (err) {
-      console.log(err)
-      let error = new Error(err.response.data.message);
-      throw error;
+      throw new Error(err.response.data.message);
     }
   }
 

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
 
@@ -11,7 +11,14 @@ import Logo from "../image/BCS-01.png";
 import KakaoIco from "../image/kakaoico.png";
 import NaverIco from "../image/naverico.png";
 
-export function Signup({ signup, signupValid, sendEmailOtp }) {
+export function Signup({ signup, signupValid, otpRenew }) {
+  let timer;
+  let [clock, Setclock] = useState(10);
+  let emailRef = useRef(null);
+  let passwordRef = useRef(null);
+  let password_checkRef = useRef(null);
+  let otpRef = useRef(null);
+
   const [signupInfo, SetsignupInfo] = useState({
     valid: false,
     email: "",
@@ -26,40 +33,64 @@ export function Signup({ signup, signupValid, sendEmailOtp }) {
     otpnum: "",
     iserror: false,
     errorMessage: "",
+    isLoading: false,
+    // timer: 180,
+    isRenew: false,
   });
 
-  const Onsubmit = async (e) => {
+  const signupValidate = async (e) => {
     e.preventDefault();
 
     // 기본적 입력값에 대한 검사
-    SetsignupInfo((c) => ({ ...c, isloading: true }));
+    SetsignupInfo((c) => ({ ...c, isloading: true, iserror: false }));
 
     await signupValid(
       signupInfo.email,
       signupInfo.password,
       signupInfo.password_check
     )
-      .then((data) =>
+      .then((data) => {
         SetsignupInfo((c) => ({
           ...c,
           valid: true,
           iserror: false,
           errorMessage: "",
           isloading: false,
-        }))
-      )
+        }));
+        let timer = setInterval(() => {
+          Setclock((c) => (c > 0 ? c - 1 : clearInterval(timer)));
+        }, 1000);
+      })
       .catch((err) => {
-        console.log(err.message);
-        // SetsignupInfo((c) => ({
-        //   ...c,
-        //   iserror: true,
-        //   errorMessage: err.message,
-        //   isloading: false,
-        // }));
+        SetsignupInfo((c) => ({
+          ...c,
+          iserror: true,
+          errorMessage: err.message,
+          isloading: false,
+        }));
       });
   };
 
-  const Otpsubmit = async (e) => {};
+  const Otpsubmit = async (e) => {
+    Setotpinfo((c) => ({ ...c, isLoading: true }));
+
+    await signup(signupInfo.email, signupInfo.password, otpinfo.otpnum)
+      .then((data) => console.log("data"))
+      .catch((err) => {});
+  };
+
+  const otpResend = async () => {
+    Setotpinfo((c) => ({ ...c, isRenew: true }));
+
+    await otpRenew(signupInfo.email)
+      .then((data) => {
+        alert("인증번호가 재발송되었습니다");
+        Setotpinfo((c) => ({ ...c, isRenew: false }));
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
   return (
     <>
@@ -72,7 +103,10 @@ export function Signup({ signup, signupValid, sendEmailOtp }) {
             </Link>
           </div>
           {/* 회원가입 디스플레이 */}
-          <div className="signup_display">
+          <div
+            className="signup_display"
+            style={{ display: !signupInfo.valid ? "flex" : "none" }}
+          >
             {/* bcs소개 */}
             <div className="bcs_introduce">
               bcs에서 좋아하는 음악의 커버영상을 즐기세요
@@ -98,25 +132,20 @@ export function Signup({ signup, signupValid, sendEmailOtp }) {
             <span
               className="error_status"
               style={{
-                display:
-                  signupInfo.iserror || otpinfo.iserror ? "block" : "none",
+                display: signupInfo.iserror ? "block" : "none",
               }}
             >
-              {signupInfo.errorMessage !== ""
-                ? signupInfo.errorMessage
-                : otpinfo.errorMessage}
+              {signupInfo.iserror && signupInfo.errorMessage}
             </span>
 
             {/* 회원가입 정보입력 */}
-            <div
-              className="signup_info_box"
-              style={{ display: !signupInfo.valid ? "flex" : "none" }}
-            >
-              <form className="signup_form" onSubmit={Onsubmit}>
+            <div className="signup_info_box">
+              <form className="signup_form" onSubmit={signupValidate}>
                 <div className="signup_infomation_box">
                   <input
                     type="email"
                     placeholder="이메일"
+                    ref={emailRef}
                     name="email"
                     required
                     value={signupInfo.email}
@@ -128,6 +157,7 @@ export function Signup({ signup, signupValid, sendEmailOtp }) {
                     type="password"
                     placeholder="비밀번호"
                     name="password"
+                    ref={passwordRef}
                     required
                     value={signupInfo.password}
                     onChange={(e) =>
@@ -139,6 +169,7 @@ export function Signup({ signup, signupValid, sendEmailOtp }) {
                     type="password"
                     placeholder="비밀번호 확인"
                     name="password_check"
+                    ref={password_checkRef}
                     required
                     value={signupInfo.password_check}
                     onChange={(e) =>
@@ -179,14 +210,17 @@ export function Signup({ signup, signupValid, sendEmailOtp }) {
                   spellCheck="off"
                   placeholder="인증번호 6자리"
                   className="otp_input"
+                  ref={otpRef}
                   value={otpinfo.otpnum}
                   onChange={(e) =>
                     Setotpinfo((c) => ({ ...c, otpnum: e.target.value }))
                   }
                 />
-                <span className="otp_valid_time">03:00</span>
+                <span className="otp_valid_time">{clock}</span>
 
-                <span className="otp_resend">재전송</span>
+                <buutton className="otp_resend" onClick={otpResend}>
+                  {otpinfo.isRenew ? "전송중" : "재전송"}
+                </buutton>
               </div>
 
               <button className="otp_btn" onClick={Otpsubmit}>

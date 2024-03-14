@@ -28,3 +28,5 @@ export class DateControl {
     return re;
   }
 }
+
+export let date = new DateControl();

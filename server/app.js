@@ -4,9 +4,11 @@ import cors from "cors";
 import helmet from "helmet";
 import bodyParser from "body-parser";
 import cookieParser from "cookie-parser";
+import https from "https";
+import fs from "fs";
 
 import { config } from "./config.js";
-import { CsrfVerify } from "./middleware/auth.js";
+import { csrfVerify } from "./middleware/auth.js";
 // import {Bcrypt, Jwt} from './middleware/secure.js'
 
 // options
@@ -23,7 +25,7 @@ const corsOption = {
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(cookieParser());
-// app.use(CsrfVerify);
+app.use(csrfVerify);
 app.use(cors(corsOption));
 app.use(express.static(path.join(__dirname, "../client/build")));
 
@@ -41,7 +43,7 @@ app.use((req, res, next) => {
 });
 
 app.use((err, req, res, next) => {
-  res.status(400).json({ error: "wehla" });
+  res.status(400).json({ message: err.message });
 });
 
 app.get("*", (req, res) => {
