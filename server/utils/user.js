@@ -163,6 +163,7 @@ export class Otp {
   async verifyOtp(email, otpnum) {
     try {
       const otp_info = await redis_db.redisGet(`otp-${email}`);
+      console.log(otp_info, otpnum);
       const { otp, expires_in } = otp_info.data;
 
       const current = date.CurrentDate().getTime();

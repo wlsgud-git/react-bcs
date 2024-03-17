@@ -14,6 +14,7 @@ export function Modal({
   modalControl,
   videoService,
   user,
+  modifyUser,
 }) {
   return (
     <section
@@ -37,6 +38,7 @@ export function Modal({
         IsmodalOpen={IsmodalOpen}
         aboutModal={aboutModal}
         modalControl={modalControl}
+        modifyUser={modifyUser}
       />
     </section>
   );

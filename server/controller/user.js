@@ -82,16 +82,8 @@ export async function currentUser(req, res) {
 
 export async function userModify(req, res) {
   try {
-    console.log("hi");
-    // let email = req.params.email;
-
-    // let info = [];
-    // // req.file ? info['profile'] = req.
-    // info.push(req.body.name);
-    // info.push(req.body.nickname);
-    // info.push(req.body.description);
-
-    // await user_db.modifyUser(email, info);
+    let email = req.params.email;
+    let img_info = req.file;
 
     return res.status(200).json({ shibal: "shibal" });
   } catch (err) {
@@ -102,7 +94,7 @@ export async function userModify(req, res) {
 
 export async function userDetail(req, res) {
   try {
-    let email = req.param("email");
+    let email = req.params.email;
     let data = await user_db.getUserDetailInfo(email);
     let user_info = data[0];
     return res.status(200).json({ user_info });

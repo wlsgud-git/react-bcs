@@ -7,19 +7,28 @@ export class AuthService {
     return this.http.fetching("/current", { method: "get" });
   }
 
+  // 유저 정보 or 변경
   async detailUser(email) {
     return this.http.fetching(`/user_detail/${email}`, {
       method: "get",
     });
   }
 
-  async modifyUser(email, info) {
+  async modifyUser(email, data) {
     return this.http.fetching(`/user/${email}`, {
       method: "put",
-      body: JSON.stringify({ hi: "hi" }),
+      body: data,
+      headers: {
+        "Content-type": "multipart/form-data",
+      },
     });
   }
 
+  async deleteUser(email) {
+    return this.http.fetching(`/user/${email}`, { method: "delete" });
+  }
+
+  // 유저 로그인 부분
   async login(email, password) {
     return this.http.fetching("/login", {
       method: "post",
@@ -40,6 +49,7 @@ export class AuthService {
     });
   }
 
+  // 유저 auth 부분
   async csrftoken() {
     let token = await this.http.fetching("/csrftoken", {
       method: "get",

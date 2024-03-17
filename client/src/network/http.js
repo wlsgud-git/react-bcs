@@ -11,7 +11,7 @@ export class HttpClient {
     this.client = axios.create({
       baseURL: baseURL,
       headers: {
-        "Content-Type": "application/json",
+        "Content-type": "application/json",
         Accept: "application/json",
       },
       withCredentials: true,

@@ -22,6 +22,7 @@ export function AuthProvider({ authService, children }) {
 
   useImperativeHandle(csrfRef, () => csrftoken);
 
+  // 유저가 auth status 부분
   useEffect(() => {
     authService
       .current()
@@ -32,6 +33,7 @@ export function AuthProvider({ authService, children }) {
       .catch((err) => {});
   }, [authService]);
 
+  // csrftoken부분
   useEffect(() => {
     authService
       .csrftoken()
@@ -41,6 +43,18 @@ export function AuthProvider({ authService, children }) {
 
   useEffect(() => {}, [authService]);
 
+  // 유저 정보 변경
+  const modifyUser = useCallback(
+    async (email, data) => authService.modifyUser(email, data),
+    [authService]
+  );
+
+  const deleteUser = useCallback(
+    async (email) => authService.deleteUser(email),
+    [authService]
+  );
+
+  // 유저 로그인 부분
   const login = useCallback(
     async (email, password) => authService.login(email, password),
     [authService]
@@ -61,6 +75,7 @@ export function AuthProvider({ authService, children }) {
     [authService]
   );
 
+  // 유저 auth 부분
   const signupValid = useCallback(
     async (email, password, password_check) =>
       authService.signupValid(email, password, password_check),
@@ -91,15 +106,21 @@ export function AuthProvider({ authService, children }) {
 
   let value = useMemo(
     () => ({
+      // 유저
       user,
+      Myfollowing,
+      modifyUser,
+      deleteUser,
+      // 로그인
       login,
       signup,
       logout,
-      Myfollowing,
 
+      // 검증
       signupValid,
       otpRenew,
 
+      // 모달
       IsmodalOpen,
       aboutModal,
       modalControl,

@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
 
 import { Loading } from "../components/loading.js";
+import { displayTime } from "../utils/common.js";
 
 import "../css/signup.css";
 
@@ -12,8 +13,6 @@ import KakaoIco from "../image/kakaoico.png";
 import NaverIco from "../image/naverico.png";
 
 export function Signup({ signup, signupValid, otpRenew }) {
-  let timer;
-  let [clock, Setclock] = useState(10);
   let emailRef = useRef(null);
   let passwordRef = useRef(null);
   let password_checkRef = useRef(null);
@@ -34,7 +33,7 @@ export function Signup({ signup, signupValid, otpRenew }) {
     iserror: false,
     errorMessage: "",
     isLoading: false,
-    // timer: 180,
+    timer: 15,
     isRenew: false,
   });
 
@@ -57,9 +56,7 @@ export function Signup({ signup, signupValid, otpRenew }) {
           errorMessage: "",
           isloading: false,
         }));
-        let timer = setInterval(() => {
-          Setclock((c) => (c > 0 ? c - 1 : clearInterval(timer)));
-        }, 1000);
+        // otpTimeUpdate();
       })
       .catch((err) => {
         SetsignupInfo((c) => ({
@@ -72,11 +69,22 @@ export function Signup({ signup, signupValid, otpRenew }) {
   };
 
   const Otpsubmit = async (e) => {
-    Setotpinfo((c) => ({ ...c, isLoading: true }));
+    Setotpinfo((c) => ({ ...c, isLoading: true, iserror: false }));
 
     await signup(signupInfo.email, signupInfo.password, otpinfo.otpnum)
-      .then((data) => console.log("data"))
-      .catch((err) => {});
+      .then((data) => {
+        alert('회원가입이 완료되었습니다')
+        window.location = process.env.REACT_APP_SERVEPORT;
+      })
+      .catch((err) => {
+        Setotpinfo((c) => ({
+          ...c,
+          iserror: true,
+          errorMessage: err.message,
+          otpnum: "",
+          isLoading: false,
+        }));
+      });
   };
 
   const otpResend = async () => {
@@ -85,11 +93,33 @@ export function Signup({ signup, signupValid, otpRenew }) {
     await otpRenew(signupInfo.email)
       .then((data) => {
         alert("인증번호가 재발송되었습니다");
-        Setotpinfo((c) => ({ ...c, isRenew: false }));
+        Setotpinfo((c) => ({
+          ...c,
+          isRenew: false,
+          timer: 15,
+          iserror: false,
+          errorMessage: "",
+        }));
+        // otpTimeUpdate();
       })
       .catch((err) => {
         console.log(err);
       });
+  };
+
+  const otpTimeUpdate = () => {
+    // if (!timer) {
+    //   clearInterval(timer);
+    //   timer = setInterval(() => {
+    //     Setotpinfo((c) => ({
+    //       ...c,
+    //       timer: c.timer > 0 ? c.timer - 1 : clearInterval(timer),
+    //     }));
+    //   }, 1000);
+    // }
+    // else{
+    //   clearInterval(timer)
+    // }
   };
 
   return (
@@ -132,7 +162,8 @@ export function Signup({ signup, signupValid, otpRenew }) {
             <span
               className="error_status"
               style={{
-                display: signupInfo.iserror ? "block" : "none",
+                display:
+                  signupInfo.iserror || otpinfo.iserror ? "block" : "none",
               }}
             >
               {signupInfo.iserror && signupInfo.errorMessage}
@@ -203,6 +234,13 @@ export function Signup({ signup, signupValid, otpRenew }) {
               </span>
             </div>
 
+            <div
+              className="otp_error_box"
+              style={{ display: otpinfo.iserror ? "block" : "none" }}
+            >
+              {otpinfo.errorMessage}
+            </div>
+
             <div className="otp_box">
               <div className="otp_input_box">
                 <input
@@ -216,15 +254,21 @@ export function Signup({ signup, signupValid, otpRenew }) {
                     Setotpinfo((c) => ({ ...c, otpnum: e.target.value }))
                   }
                 />
-                <span className="otp_valid_time">{clock}</span>
+                <span className="otp_valid_time">
+                  {otpinfo.timer > 0 ? displayTime(otpinfo.timer) : "00:00"}
+                </span>
 
                 <buutton className="otp_resend" onClick={otpResend}>
-                  {otpinfo.isRenew ? "전송중" : "재전송"}
+                  {otpinfo.timer && otpinfo.isRenew ? "전송중" : "재전송"}
                 </buutton>
               </div>
 
-              <button className="otp_btn" onClick={Otpsubmit}>
-                확인
+              <button
+                className="otp_btn"
+                onClick={Otpsubmit}
+                disabled={!otpinfo.timer}
+              >
+                {otpinfo.timer ? "확인" : "인증번호 시간이 지남"}
               </button>
             </div>
           </div>

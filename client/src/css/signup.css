@@ -184,6 +184,14 @@
   margin: 15px 0px;
 }
 
+.otp_error_box {
+  width: 90%;
+  color: red;
+  font-size: 14px;
+  font-weight: 400;
+  text-align: center;
+}
+
 .otp_box {
   margin-top: 25px;
   display: flex;

@@ -8,15 +8,20 @@ export class VideoService {
   }
 
   async createVideo(data) {
-    // console.log("hi");
     return this.http.fetching("/video", {
       method: "post",
       body: data,
-      // JSON.stringify({ hi: "hi" })
+      headers: { "Content-type": "multypart/form-data" },
     });
   }
 
-  async modifyVideo() {}
+  async modifyVideo(id, data) {
+    return this.http.fetching(`/video/${id}`, {
+      method: "put",
+      body: data,
+      headers: { "Content-type": "multypart/form-data" },
+    });
+  }
 
   async deleteVideo(id) {}
 

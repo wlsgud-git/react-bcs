@@ -16,8 +16,7 @@ export function Profile({ modalControl }) {
     authService
       .detailUser(email)
       .then((data) => {
-        console.log(data);
-        Setuser_info(data.data.user_info);
+        Setuser_info(data.user_info);
       })
       .catch((err) => console.log(err));
   }, []);

@@ -4,7 +4,13 @@ import { authService } from "../index.js";
 
 import Bird from "../image/bird.jpg";
 
-export function ProfileEdit({ user, IsmodalOpen, aboutModal, modalControl }) {
+export function ProfileEdit({
+  user,
+  IsmodalOpen,
+  aboutModal,
+  modalControl,
+  modifyUser,
+}) {
   let profile_change_input = useRef(null);
 
   let [profileImageFile, SetprofileImageFile] = useState(null);
@@ -18,28 +24,15 @@ export function ProfileEdit({ user, IsmodalOpen, aboutModal, modalControl }) {
 
   const ModifyInfo = async (e) => {
     e.preventDefault();
-
     const formData = new FormData();
+    formData.append("profile_image", profileImageFile);
+    formData.append("name", user_infomation.name);
+    formData.append("nickname", user_infomation.nickname);
+    formData.append("description", user_infomation.description);
 
-    if (profileImageFile) formData.append("profile_image", profileImageFile);
-    if (user_infomation.name != user.name)
-      formData.append("name", user_infomation["name"]);
-    if (user_infomation.nickname != user.nickname)
-      formData.append("nickname", user_infomation["nickname"]);
-    if (user_infomation.description != user.description)
-      formData.append("description", user_infomation["description"]);
-
-    const res = await fetch(`http://localhost:8000/user/${user.email}`, {
-      method: "put",
-      body: formData,
-      headers: {
-        Accept: "application/json",
-      },
-      credentials: "include",
-    });
-
-    const status = await res.status;
-    const data = await res.json();
+    await modifyUser(user.email, formData)
+      .then((data) => console.log(data))
+      .catch((err) => console.log(err));
   };
 
   function thumbnailPreview(e) {

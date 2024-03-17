@@ -29,6 +29,7 @@ export function App({ videoService, commentService }) {
     signup,
     Myfollowing,
     signupValid,
+    modifyUser,
     otpRenew,
     IsmodalOpen,
     aboutModal,
@@ -44,6 +45,7 @@ export function App({ videoService, commentService }) {
           modalControl={modalControl}
           videoService={videoService}
           user={user}
+          modifyUser={modifyUser}
         />
         <Routes>
           <Route
