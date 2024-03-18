@@ -12,6 +12,7 @@ export function ProfileEdit({
   modifyUser,
 }) {
   let profile_change_input = useRef(null);
+  let timg = useRef(null);
 
   let [profileImageFile, SetprofileImageFile] = useState(null);
 
@@ -36,12 +37,11 @@ export function ProfileEdit({
   };
 
   function thumbnailPreview(e) {
-    let timg = document.querySelector(".pem_thumbnail_img");
     let reader = new FileReader();
     let file = e.target.files[0];
 
     reader.onload = (event) => {
-      timg.src = event.target.result;
+      timg.current.src = event.target.result;
     };
     reader.readAsDataURL(file);
     SetprofileImageFile(file);
@@ -61,7 +61,19 @@ export function ProfileEdit({
 
         <span
           className="pem_modal_close"
-          onClick={() => modalControl("hide", "profile_edit")}
+          onClick={() => {
+            modalControl("hide", "profile_edit");
+            Setuser_infomation((c) => ({
+              ...c,
+              profile_image_url: user.profile_image_url,
+              name: "",
+              nickname: "",
+              description: "",
+            }));
+            SetprofileImageFile(null);
+            timg.current.src = user ? user.profile_image_url : "";
+            profile_change_input.current.value = "";
+          }}
         >
           X
         </span>
@@ -90,7 +102,8 @@ export function ProfileEdit({
               </span>
               <span className="pem_thumbnail_circle">
                 <img
-                  src={user ? user.profile_image_url : ""}
+                  ref={timg}
+                  src={user && user.profile_image_url}
                   className="pem_thumbnail_img"
                 ></img>
               </span>

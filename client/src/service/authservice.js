@@ -85,7 +85,7 @@ export class AuthService {
 
   checkEmail(value) {
     let email = value;
-    let ErrorMessage = "이메일 형식이 올바르지 않습니다";
+    let ErrorMessage = "이메일 형식이 올바르지 않습니다-email";
     let emailregex = /^[A-Za-z0-9_\.\-]+@[A-Za-z0-9\-]+\.[A-Za-z0-9\-]+/;
     if (emailregex.test(email) == false) throw new Error(ErrorMessage);
     return true;
@@ -96,7 +96,7 @@ export class AuthService {
     let minLength = 8;
     let maxLength = 20;
     let ErrorMessage =
-      "비밀번호는 길이 8~20, 특수문자, 영문, 숫자를 포함하여 구성하여야 함";
+      "비밀번호는 길이 8~20, 특수문자, 영문, 숫자를 포함하여 구성하여야 함-password";
 
     var passwordRegex =
       /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,20}$/;
@@ -113,7 +113,7 @@ export class AuthService {
 
   passwordCheckValid(val1, val2) {
     if (val1 != val2)
-      throw new Error("비밀번호 값과 비밀번호 확인 값이 다릅니다");
+      throw new Error("비밀번호 값과 비밀번호 확인 값이 다릅니다-password_check");
     return;
   }
 }

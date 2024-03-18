@@ -1,14 +1,4 @@
-import AWS from "@aws-sdk/client-s3";
-import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import { config } from "../config.js";
-
-export const AWS_s3 = new AWS.S3Client({
-  region: config.aws.region,
-  credentials: {
-    accessKeyId: config.aws.access_key,
-    secretAccessKey: config.aws.secret_key,
-  },
-});
 
 export class S3Video {
   constructor() {}

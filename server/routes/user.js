@@ -27,7 +27,7 @@ import { upload } from "../utils/variable.js";
 router.get("/current", IsAuth, currentUser);
 router.get("/csrftoken", getCsrftoken);
 router.get("/user_detail/:email", userDetail);
-router.put("/user/:email", upload.single("profile_image"), userModify);
+router.put("/user/:email", IsAuth, upload.single("profile_image"), userModify);
 // router.delete('/user:id', IsAuth)
 
 // user login

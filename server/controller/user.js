@@ -85,7 +85,7 @@ export async function userModify(req, res) {
     let email = req.params.email;
     let img_info = req.file;
 
-    return res.status(200).json({ shibal: "shibal" });
+    return res.status(200).json({ message: "정보가 변경되었습니다" });
   } catch (err) {
     console.log(err);
     return res.status(400).json({ err: "err" });

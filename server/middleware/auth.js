@@ -57,7 +57,7 @@ export const signupValidation = () => {
 
     return res
       .status(400)
-      .json({ type: errors.errors[0].path, message: errors.errors[0].msg });
+      .json({ message: `${errors.errors[0].msg}-${errors.errors[0].path}` });
   };
 };
 

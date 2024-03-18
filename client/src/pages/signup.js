@@ -59,12 +59,17 @@ export function Signup({ signup, signupValid, otpRenew }) {
         // otpTimeUpdate();
       })
       .catch((err) => {
+        let msg = err.message.split("-");
         SetsignupInfo((c) => ({
           ...c,
           iserror: true,
-          errorMessage: err.message,
+          errorMessage: msg[0],
           isloading: false,
+          [msg[1]]: "",
         }));
+        if (msg[1] == "email") emailRef.current.focus();
+        else if (msg[1] == "password") passwordRef.current.focus();
+        else password_checkRef.current.focus();
       });
   };
 
@@ -73,7 +78,7 @@ export function Signup({ signup, signupValid, otpRenew }) {
 
     await signup(signupInfo.email, signupInfo.password, otpinfo.otpnum)
       .then((data) => {
-        alert('회원가입이 완료되었습니다')
+        alert("회원가입이 완료되었습니다");
         window.location = process.env.REACT_APP_SERVEPORT;
       })
       .catch((err) => {
