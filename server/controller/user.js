@@ -1,12 +1,12 @@
 import { user_db } from "../data/user.js";
 import { fbcrypt, fjwt } from "../utils/secure.js";
 import { date } from "../utils/date.js";
-import { oauth } from "../utils/user.js";
-import { cookieSetToken } from "../middleware/auth.js";
+import { oauth, auth_cookie } from "../utils/user.js";
+import { s3File } from "../utils/aws.js";
+import { config } from "../config.js";
 
 // user control
 export async function socialLoginCallback(req, res) {
-  console.log("hi");
   try {
     const code = req.query["code"];
     const state = req.query["state"];
@@ -44,13 +44,11 @@ export async function socialLoginCallback(req, res) {
       company = "kakao";
     }
 
-    //데이터 베이스 내에 이메일과 일치하는 정보가 없다면 소셜로그인 진행 (회원가입 + set cookie)
-    // 데이터 베이스 내에 이메일과 일치하는 정보가 있고 회사도 같다면 소셜로그인 진행 (set cookie)
-    // 데이터 베이스 내에 이메일과 일치하는 정보가 있지만 회사가 다르면 소셜로그인 불가 (error)
-
+    // 데이터 베이스에서 유저 정보를 찾은뒤
     let data = await user_db.findUserByEmail(c_email);
     let user = await data[0];
 
+    // 유저가 없다면 소셜로그인으로 회원가입 진행
     if (!user) {
       let id = await fbcrypt.createHashText(
         `user-${c_email}-${date.CurrentDateString()}`
@@ -60,9 +58,12 @@ export async function socialLoginCallback(req, res) {
       await user_db.creatUser(info);
     }
 
-    cookieSetToken(res, { key: "b_id", token: c_tokens["access_token"] });
-    cookieSetToken(res, { key: "b_rt_id", token: c_tokens["refresh_token"] });
-    cookieSetToken(res, { key: "bcs-com", token: c_tokens["company"] });
+    // 쿠키에 토큰과 회사 정보 저장
+    auth_cookie.setCookie(res, {
+      b_id: c_tokens["access_token"],
+      b_rt_id: c_tokens["refresh_token"],
+      company,
+    });
 
     return res.redirect("http://localhost:3000");
   } catch (err) {
@@ -82,8 +83,20 @@ export async function currentUser(req, res) {
 
 export async function userModify(req, res) {
   try {
-    let email = req.params.email;
-    let img_info = req.file;
+    const key = req.params.id;
+    const file = req.file;
+    const data = req.body;
+
+    if (file) {
+      let profile_image_url = await s3File.s3FileUpload({
+        key,
+        file,
+        bucket: config.aws.bucket.profile_image,
+      });
+      data["profile_image_url"] = profile_image_url;
+    }
+
+    await user_db.modifyUser(key, data);
 
     return res.status(200).json({ message: "정보가 변경되었습니다" });
   } catch (err) {
@@ -123,12 +136,12 @@ export async function login(req, res) {
     let refresh_token = await fjwt.createRefreshtoken(email);
     let company = "bcs";
 
-    cookieSetToken(res, { key: "b_id", token: access_token });
-    cookieSetToken(res, {
-      key: "b_rt_id",
-      token: refresh_token,
+    auth_cookie.setCookie(res, {
+      b_id: access_token,
+      b_rt_id: refresh_token,
+      "bcs-com": company,
     });
-    cookieSetToken(res, { key: "bcs-com", token: company });
+
     return res.status(200).json({ message: "로그인 완료" });
   } catch (err) {
     return res.status(400).json({ message: err.message });
@@ -158,9 +171,6 @@ export async function signup(req, res) {
 }
 
 export async function logout(req, res) {
-  res.clearCookie("b_id");
-  res.clearCookie("b_rt_id");
-  res.clearCookie("bcs-com");
-
+  auth_cookie.deleteCookie(["b_id", "b_rt_id", "bcs-com"]);
   return res.status(200).json({ location: "/" });
 }

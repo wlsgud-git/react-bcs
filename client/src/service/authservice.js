@@ -14,8 +14,8 @@ export class AuthService {
     });
   }
 
-  async modifyUser(email, data) {
-    return this.http.fetching(`/user/${email}`, {
+  async modifyUser(id, data) {
+    return this.http.fetching(`/user/${id}`, {
       method: "put",
       body: data,
       headers: {
@@ -50,6 +50,13 @@ export class AuthService {
   }
 
   // 유저 auth 부분
+  async tokenRenew(refresh_token) {
+    return this.http.fetching("", {
+      method: "post",
+      body: JSON.stringify({refresh_token})
+    });
+  }
+
   async csrftoken() {
     let token = await this.http.fetching("/csrftoken", {
       method: "get",
@@ -113,7 +120,9 @@ export class AuthService {
 
   passwordCheckValid(val1, val2) {
     if (val1 != val2)
-      throw new Error("비밀번호 값과 비밀번호 확인 값이 다릅니다-password_check");
+      throw new Error(
+        "비밀번호 값과 비밀번호 확인 값이 다릅니다-password_check"
+      );
     return;
   }
 }

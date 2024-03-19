@@ -95,24 +95,21 @@ class UserDb {
     }
   }
   // put
-  async modifyUser(email, info) {
-    let count = 0;
-    let floor = ["name", "nickname", "description"];
-    let mo = info
-      .map((val, idx) => {
-        if (val) {
-          count += 1;
-          return `${floor[idx]}=$${count}`;
-        }
-      })
-      .filter((val) => val);
+  async modifyUser(id, info) {
     try {
-      const query = `update users set ${mo
-        .join(",")
-        .toString()} where email=$${(mo.length + 1).toString()}`;
-      const data = info.filter((val) => val);
-      data.push(email);
-      return await DbPlay(query, data);
+      let index = 1;
+      let joint = [];
+      let data = [];
+      for (let [key, value] of Object.entries(info)) {
+        joint.push(`${key} = $${index}`);
+        data.push(value);
+        index += 1;
+      }
+
+      let query = `update users set ${joint.join(",")} where id = $${index}`;
+      data.push(id);
+
+      return DbPlay(query, data);
     } catch (err) {
       throw err;
     }

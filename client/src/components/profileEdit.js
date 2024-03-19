@@ -13,11 +13,11 @@ export function ProfileEdit({
 }) {
   let profile_change_input = useRef(null);
   let timg = useRef(null);
+  console.log(user && user.profile_image_url);
 
-  let [profileImageFile, SetprofileImageFile] = useState(null);
+  let [profileImageFile, SetprofileImageFile] = useState(undefined);
 
   let [user_infomation, Setuser_infomation] = useState({
-    profile_image_url: user ? user.profile_image_url : "",
     name: user ? user.name : "",
     nickname: user ? user.nickname : "",
     description: user ? user.description : "",
@@ -25,14 +25,24 @@ export function ProfileEdit({
 
   const ModifyInfo = async (e) => {
     e.preventDefault();
-    const formData = new FormData();
-    formData.append("profile_image", profileImageFile);
-    formData.append("name", user_infomation.name);
-    formData.append("nickname", user_infomation.nickname);
-    formData.append("description", user_infomation.description);
 
-    await modifyUser(user.email, formData)
-      .then((data) => console.log(data))
+    let check = ["name", "nickname", "description"];
+    const formData = new FormData();
+
+    if (profileImageFile) formData.append("profile_image", profileImageFile);
+    for (var i = 0; i < check.length; i++) {
+      let be = user[`${check[i]}`];
+      let cur = user_infomation[check[i]];
+      if (cur !== "" && cur !== be) formData.append(check[i], cur);
+    }
+
+    if (!Array.from(formData.keys()).length) {
+      alert("변경사항이 없습니다");
+      return;
+    }
+
+    await modifyUser(user.id, formData)
+      .then((data) => (window.location = process.env.REACT_APP_SERVEPORT))
       .catch((err) => console.log(err));
   };
 
@@ -65,12 +75,11 @@ export function ProfileEdit({
             modalControl("hide", "profile_edit");
             Setuser_infomation((c) => ({
               ...c,
-              profile_image_url: user.profile_image_url,
               name: "",
               nickname: "",
               description: "",
             }));
-            SetprofileImageFile(null);
+            SetprofileImageFile(undefined);
             timg.current.src = user ? user.profile_image_url : "";
             profile_change_input.current.value = "";
           }}

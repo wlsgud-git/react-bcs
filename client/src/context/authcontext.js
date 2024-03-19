@@ -45,7 +45,7 @@ export function AuthProvider({ authService, children }) {
 
   // 유저 정보 변경
   const modifyUser = useCallback(
-    async (email, data) => authService.modifyUser(email, data),
+    async (id, data) => authService.modifyUser(id, data),
     [authService]
   );
 
@@ -76,6 +76,11 @@ export function AuthProvider({ authService, children }) {
   );
 
   // 유저 auth 부분
+  const tokenRenew = useCallback(
+    async (refresh_token) => authService.tokenRenew(refresh_token),
+    [authService]
+  );
+
   const signupValid = useCallback(
     async (email, password, password_check) =>
       authService.signupValid(email, password, password_check),
@@ -119,6 +124,7 @@ export function AuthProvider({ authService, children }) {
       // 검증
       signupValid,
       otpRenew,
+      tokenRenew,
 
       // 모달
       IsmodalOpen,

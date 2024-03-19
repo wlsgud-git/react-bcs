@@ -35,7 +35,7 @@ class Jwt {
       const access_token = await jwt.sign(
         { email: email },
         config.jwt.a_secret_key,
-        { expiresIn: "1d" }
+        { expiresIn: "10s" }
       );
       return access_token;
     } catch (err) {
@@ -57,7 +57,7 @@ class Jwt {
       const refresh_token = await jwt.sign(
         { email: email },
         config.jwt.r_secret_key,
-        { expiresIn: "2d" }
+        { expiresIn: "1m" }
       );
       return refresh_token;
     } catch (err) {
@@ -73,6 +73,8 @@ class Jwt {
       throw err;
     }
   }
+
+  async tokenControl(info) {}
 }
 
 export let fbcrypt = new Bcrypt();

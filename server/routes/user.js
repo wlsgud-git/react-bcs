@@ -27,7 +27,7 @@ import { upload } from "../utils/variable.js";
 router.get("/current", IsAuth, currentUser);
 router.get("/csrftoken", getCsrftoken);
 router.get("/user_detail/:email", userDetail);
-router.put("/user/:email", IsAuth, upload.single("profile_image"), userModify);
+router.put("/user/:id", IsAuth, upload.single("profile_image"), userModify);
 // router.delete('/user:id', IsAuth)
 
 // user login
@@ -40,5 +40,6 @@ router.post("/signup_valid", signupValidation(), sendOtpWithEmail);
 // user otp verify
 // router.post("/email_otp", sendOtpWithEmail);
 router.post("/otp_renew", sendOtpWithEmail);
+// router.post('/auth/token',  )
 
 export default router;

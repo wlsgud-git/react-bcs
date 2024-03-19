@@ -61,79 +61,34 @@ export const signupValidation = () => {
   };
 };
 
-// export const loginValidation = () => {
-//   return async (req, res, next) => {
-//     const validations = [
-//       body("email")
-//         .trim()
-//         .toLowerCase()
-//         .isEmail()
-//         .withMessage("이메일 형식이 올바르지 않습니다")
-//         .notEmpty()
-//         .withMessage("필수항목 입니다")
-//         .custom(async (value) => {
-//           let result = await emailOverlapCheck(value);
-//           if (!result) throw new Error("영차");
-//           return true;
-//         })
-//         .withMessage("이미 가입된 이메일입니다"),
-//       body("password")
-//         .toLowerCase()
-//         .notEmpty()
-//         .withMessage("필수항목 입니다")
-//         .isLength({ min: 6, max: 20 })
-//         .withMessage("비밀번호는 최소 6자 최대 20자 이내로 설정하여야 합니다")
-//         .custom((value) => {
-//           let result = passwordValid(value);
-//           return result;
-//         })
-//         .withMessage(
-//           "비밀번호는 영문, 숫자, 특수문자를 최소 1개 이상 포함하여야 합니다"
-//         )
-//     ];
-//     for (let validation of validations) {
-//       const result = await validation.run(req);
-//       if (result.errors.length) break;
-//     }
-
-//     const errors = validationResult(req);
-//     if (errors.isEmpty()) {
-//       return next();
-//     }
-
-//     return res.status(400).json({ errors: errors.array() });
-//   };
-// };
-
-function tokenCheck(req) {
-  let token;
+function getToken(req) {
+  let access_token;
   let company;
 
   let authHeader = req.headers.authorization;
 
   if (authHeader && authHeader.split(" ")[0] == "Bearer") {
-    token = authHeader.split(" ")[1];
+    access_token = authHeader.split(" ")[1];
     company = req.headers["bcs-com"];
   }
 
-  if (!token) {
-    token = req.cookies["b_id"];
+  if (!access_token) {
+    access_token = req.cookies["b_id"];
     company = req.cookies["bcs-com"];
   }
 
-  if (!token || token == "null") {
-    let err = new Error("token undefined");
+  if (!access_token || access_token == "null") {
+    let err = new Error("access_token undefined");
     err.status = 400;
     throw err;
   }
-
-  return [token, company];
+  return { access_token, company };
 }
 
 // auth service
 export async function IsAuth(req, res, next) {
   try {
-    let [access_token, company] = tokenCheck(req);
+    let { access_token, company } = getToken(req);
 
     let email;
     if (company == "bcs") {
@@ -151,17 +106,6 @@ export async function IsAuth(req, res, next) {
   } catch (err) {
     next(err);
   }
-}
-
-export function cookieSetToken(res, token_info) {
-  let token_option = {
-    httpOnly: true,
-    secure: true,
-    maxAge: 3600 * 1000,
-    sameSite: "none",
-  };
-
-  res.cookie(token_info["key"], token_info["token"]);
 }
 
 export async function getCsrftoken(req, res, next) {

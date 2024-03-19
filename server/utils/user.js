@@ -19,14 +19,6 @@ const transport = nodemailer.createTransport({
   },
 });
 
-export class UserProfileImg {
-  constructor() {}
-
-  profileUpload(data) {}
-
-  profileDelete(data) {}
-}
-
 export class Oauth {
   constructor() {}
 
@@ -205,7 +197,30 @@ export class AuthValidate {
   }
 }
 
+export class AuthCookie {
+  constructor() {}
+
+  setCookie(res, info) {
+    let token_option = {
+      httpOnly: true,
+      secure: true,
+      maxAge: 3600 * 1000,
+      sameSite: "none",
+    };
+
+    console.log(info);
+    for (let [key, value] of Object.entries(info)) {
+      console.log(key, value);
+      res.cookie(key, value, token_option);
+    }
+  }
+
+  deleteCookie(res, info) {
+    info.map((key) => res.clearCookie(key));
+  }
+}
+
 export let oauth = new Oauth();
-export let user_profile = new UserProfileImg();
 export let otp = new Otp();
 export let auth_valid = new AuthValidate();
+export let auth_cookie = new AuthCookie();

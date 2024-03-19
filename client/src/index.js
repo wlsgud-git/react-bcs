@@ -6,12 +6,14 @@ import { reportWebVitals } from "./reportWebVitals.js";
 
 import { HttpClient } from "./network/http.js";
 import { AuthService } from "./service/authservice.js";
+// import { ErrorHandle } from "./network/error.js";
 import { AuthProvider, FetchcsrfToken } from "./context/authcontext.js";
 import { VideoService } from "./service/videoService.js";
 import { CommentService } from "./service/commentServide.js";
 
 let baseurl = process.env.REACT_APP_BASEURL;
 
+// const errorHandle = new ErrorHandle();
 const httpClient = new HttpClient(baseurl, () => FetchcsrfToken());
 export const authService = new AuthService(httpClient);
 const videoService = new VideoService(httpClient);
