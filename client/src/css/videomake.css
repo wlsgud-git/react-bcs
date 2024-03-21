@@ -208,10 +208,35 @@
 }
 
 /* 비디오 커버송 관련 */
-.md_video_detail_cover_song {
-  margin-top: 15px;
+.md_video_coversong_container {
   width: 100%;
-  height: 35px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 15px;
+}
+
+.md_video_coversong_infomation_container {
+  width: 9%;
+  height: 40px;
+  border: 1px solid black;
+  border-radius: 10px;
+  text-align: center;
+  /* display: flex;
+  align-items: center;
+  justify-content: center; */
+  overflow: hidden;
+}
+
+.md_coversong_img_preview {
+  width: 100%;
+  height: 100%;
+  display: inline-block;
+}
+
+.md_video_detail_cover_song {
+  width: 87%;
+  height: 40px;
   display: flex;
   border: 1px solid #999;
   align-items: center;
@@ -229,7 +254,7 @@
 .md_vd_cover_song_recommand {
   position: absolute;
   left: 0;
-  top: 35px;
+  top: 40px;
   width: 100%;
   background-color: #fff;
   z-index: 1512;

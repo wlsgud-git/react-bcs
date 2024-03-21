@@ -8,10 +8,11 @@ export class VideoService {
   }
 
   async createVideo(data) {
+    console.log("hi");
     return this.http.fetching("/video", {
       method: "post",
       body: data,
-      headers: { "Content-type": "multypart/form-data" },
+      headers: { "Content-type": "multipart/form-data" },
     });
   }
 
@@ -19,7 +20,7 @@ export class VideoService {
     return this.http.fetching(`/video/${id}`, {
       method: "put",
       body: data,
-      headers: { "Content-type": "multypart/form-data" },
+      headers: { "Content-type": "multipart/form-data" },
     });
   }
 

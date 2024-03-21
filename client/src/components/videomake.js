@@ -1,8 +1,5 @@
 import { forwardRef, useEffect, useRef, useState } from "react";
 import "../css/videomake.css";
-// import { HttpClient } from "./network/http.js";
-
-// let httpClient = new HttpClient();
 
 export function Videomake({
   IsmodalOpen,
@@ -12,6 +9,7 @@ export function Videomake({
   videoService,
 }) {
   const videoFileInput = useRef();
+  const coversongInput = useRef();
 
   const [videoFileDisplay, SetvideoFileDisplay] = useState(true);
   const [videoFileError, SetvideoFileError] = useState({
@@ -61,10 +59,10 @@ export function Videomake({
     formData.append("release", release);
     formData.append("user_id", user.id);
 
-    // await videoService
-    //   .createVideo(formData)
-    //   .then((data) => console.log(data))
-    //   .catch((err) => console.log(err));
+    await videoService
+      .createVideo(formData)
+      .then((data) => console.log(data))
+      .catch((err) => console.log(err));
   }
 
   async function Coversongs(e) {
@@ -75,7 +73,8 @@ export function Videomake({
     await videoService
       .getCoversong(query)
       .then((data) => {
-        SetcoversongList(data.data.list);
+        console.log(data);
+        SetcoversongList(data.list);
       })
       .catch((err) => console.log(err));
   }
@@ -135,6 +134,7 @@ export function Videomake({
           <input
             ref={videoFileInput}
             type="file"
+            accept="video/mp4"
             className="md_video_file_input"
             style={{ display: "none" }}
             onChange={VideoFileValidate}
@@ -187,72 +187,101 @@ export function Videomake({
               </div>
 
               {/* <!-- 커버송 --> */}
-              <div className="md_video_detail_cover_song">
-                <div className="md_vd_cover_song_input_box">
-                  <ul
-                    className="md_vd_cover_song_recommand"
-                    style={{ display: coversonginfo.state ? "flex" : "none" }}
-                  >
-                    {coversongList.map((li, index) => (
-                      <li
-                        className="md_coversong_list"
-                        key={index}
-                        onMouseDown={() =>
-                          Setcoversonginfo({
-                            ...coversonginfo,
-                            query: li.title,
-                            id: li.id,
-                            title: li.title,
-                            artists: li.artists,
-                            thumbnail_url: li.thumbnail_url,
-                          })
+              <div className="md_video_coversong_container">
+                <div className="md_video_coversong_infomation_container">
+                  <span className="md_coversong_img_preview">
+                    {coversonginfo.thumbnail_url != "" ? (
+                      <img
+                        style={{
+                          width: "100%",
+                          height: " 100%",
+                          cursor: "pointer",
+                        }}
+                        src={
+                          coversonginfo.thumbnail_url != ""
+                            ? coversonginfo.thumbnail_url
+                            : ""
                         }
-                      >
-                        <span className="md_coversong_image">
-                          {" "}
-                          <img src={li.thumbnail_url}></img>{" "}
-                        </span>
-                        <span className="md_coversong_title"> {li.title} </span>
-                        <span className="md_coversong_artists">
-                          {li.artists.map((man, idx) => (
-                            <span className="artist_name" key={idx}>
-                              {man}{" "}
-                            </span>
-                          ))}
-                        </span>
-                      </li>
-                    ))}
-                  </ul>
-
-                  <input
-                    type="text"
-                    spellCheck="false"
-                    placeholder="커버송 정보를 입력하세요"
-                    value={coversonginfo.query}
-                    onBlur={() =>
-                      Setcoversonginfo({ ...coversonginfo, state: false })
-                    }
-                    onChange={(e) => {
-                      Setcoversonginfo({
-                        ...coversonginfo,
-                        query: e.target.value,
-                        state: true,
-                      });
-                      Coversongs(e);
-                    }}
-                    className="md_vd_cover_song_input"
-                  />
+                        title={coversonginfo.title}
+                      ></img>
+                    ) : (
+                      "?"
+                    )}
+                  </span>
                 </div>
 
-                <div className="md_vd_cover_song_clear">
-                  <button
-                    className="md_vd_cover_song_clear_btn"
-                    onClick={() =>
-                      Setcoversonginfo({ ...coversonginfo, query: "" })
-                    }
-                  >
-                    X
-                  </button>
+                <div className="md_video_detail_cover_song">
+                  <div className="md_vd_cover_song_input_box">
+                    <ul
+                      className="md_vd_cover_song_recommand"
+                      style={{ display: coversonginfo.state ? "flex" : "none" }}
+                    >
+                      {coversongList.map((li, index) => (
+                        <li
+                          className="md_coversong_list"
+                          key={index}
+                          onMouseDown={() =>
+                            Setcoversonginfo({
+                              ...coversonginfo,
+                              query: li.title,
+                              id: li.id,
+                              title: li.title,
+                              artists: li.artists,
+                              thumbnail_url: li.thumbnail_url,
+                            })
+                          }
+                        >
+                          <span className="md_coversong_image">
+                            {" "}
+                            <img src={li.thumbnail_url}></img>{" "}
+                          </span>
+                          <span className="md_coversong_title">
+                            {" "}
+                            {li.title}{" "}
+                          </span>
+                          <span className="md_coversong_artists">
+                            {li.artists.map((man, idx) => (
+                              <span className="artist_name" key={idx}>
+                                {man}{" "}
+                              </span>
+                            ))}
+                          </span>
+                        </li>
+                      ))}
+                    </ul>
+
+                    <input
+                      type="text"
+                      ref={coversongInput}
+                      spellCheck="false"
+                      placeholder="커버송 정보를 입력하세요"
+                      value={coversonginfo.query}
+                      onBlur={() =>
+                        Setcoversonginfo({ ...coversonginfo, state: false })
+                      }
+                      onChange={(e) => {
+                        Setcoversonginfo({
+                          ...coversonginfo,
+                          query: e.target.value,
+                          state: true,
+                        });
+                        Coversongs(e);
+                      }}
+                      className="md_vd_cover_song_input"
+                    />
+                  </div>
+
+                  <div className="md_vd_cover_song_clear">
+                    <button
+                      className="md_vd_cover_song_clear_btn"
+                      onClick={() => {
+                        Setcoversonginfo({ ...coversonginfo, query: "" });
+                        coversongInput.current.focus();
+                      }}
+                    >
+                      X
+                    </button>
+                  </div>
                 </div>
               </div>
 

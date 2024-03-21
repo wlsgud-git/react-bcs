@@ -13,7 +13,7 @@ export function ProfileEdit({
 }) {
   let profile_change_input = useRef(null);
   let timg = useRef(null);
-  console.log(user && user.profile_image_url);
+  // console.log(user && user.profile_image_url);
 
   let [profileImageFile, SetprofileImageFile] = useState(undefined);
 

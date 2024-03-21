@@ -35,7 +35,7 @@ export class HttpClient {
       const res = await this.client(req);
       return res.data;
     } catch (err) {
-      // this.errorHandle.globalError(err.response.data);
+      console.log(err.response.data)
       throw new Error(err.response.data.message);
     }
   }

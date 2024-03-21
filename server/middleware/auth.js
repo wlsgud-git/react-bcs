@@ -82,6 +82,7 @@ function getToken(req) {
     err.status = 400;
     throw err;
   }
+
   return { access_token, company };
 }
 
@@ -89,8 +90,8 @@ function getToken(req) {
 export async function IsAuth(req, res, next) {
   try {
     let { access_token, company } = getToken(req);
-
     let email;
+
     if (company == "bcs") {
       let decoded = await fjwt.verifyAccesstoken(access_token);
       email = decoded.email;
@@ -104,6 +105,7 @@ export async function IsAuth(req, res, next) {
     req.email = email;
     next();
   } catch (err) {
+    console.log({ status: err.status, name: err.name, message: err.message });
     next(err);
   }
 }

@@ -37,7 +37,7 @@ export async function socialLoginCallback(req, res) {
       } = await oauth.kakaoToken(code);
 
       let user_info = await oauth.kakaoUserinfo(access_token);
-      let email = user_info.data.kakao_account.email;
+      let email = user_info.kakao_account.email;
 
       c_tokens = { access_token, refresh_token, company: "kakao" };
       c_email = email;
@@ -62,7 +62,7 @@ export async function socialLoginCallback(req, res) {
     auth_cookie.setCookie(res, {
       b_id: c_tokens["access_token"],
       b_rt_id: c_tokens["refresh_token"],
-      company,
+      "bcs-com": company,
     });
 
     return res.redirect("http://localhost:3000");
@@ -171,6 +171,6 @@ export async function signup(req, res) {
 }
 
 export async function logout(req, res) {
-  auth_cookie.deleteCookie(["b_id", "b_rt_id", "bcs-com"]);
-  return res.status(200).json({ location: "/" });
+  auth_cookie.deleteCookie(res,["b_id", "b_rt_id", "bcs-com"]);
+  return res.status(204).json({ location: "/" });
 }

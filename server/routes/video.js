@@ -2,6 +2,7 @@ import express from "express";
 
 // middleware
 import { IsAuth } from "../middleware/auth.js";
+import { videoValidate } from "../middleware/video.js";
 // controller
 import {
   getVideolist,
@@ -17,7 +18,13 @@ const router = express.Router();
 router.get("/video", getVideolist);
 
 // post
-router.post("/video", upload.single("video"), createVideo);
+router.post(
+  "/video",
+  IsAuth,
+  upload.single("video"),
+  videoValidate(),
+  createVideo
+);
 
 // put
 // router.put("/video/:id");
