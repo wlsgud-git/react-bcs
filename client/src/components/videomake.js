@@ -8,44 +8,92 @@ export function Videomake({
   modalControl,
   videoService,
 }) {
-  const videoFileInput = useRef();
-  const coversongInput = useRef();
-
-  const [videoFileDisplay, SetvideoFileDisplay] = useState(true);
-  const [videoFileError, SetvideoFileError] = useState({
+  let video_file_form = {
+    file: null,
+    preview_src: "",
+    iserror: false,
+    isLoading: false,
+    errorMessage: "",
     state: false,
-    message: "",
-  });
-
-  const [videoFile, SetvideoFile] = useState(null);
-  const [videoTitle, SetvideoTitle] = useState("");
-  const [coversongList, SetcoversongList] = useState([]);
-  const [coversonginfo, Setcoversonginfo] = useState({
+  };
+  let video_info_form = {
+    isError: false,
+    isLoading: false,
+    title: "",
+    release: null,
+  };
+  let coversong_info_form = {
     query: "",
     state: false,
+    valid: false,
     id: "",
     title: "",
     artists: [],
     thumbnail_url: "",
-  });
-  const [release, Setrelease] = useState(false);
+  };
+
+  const videoFileInput = useRef();
+  const coversongInput = useRef();
+  const videoTitleInput = useRef();
+
+  const [coversongList, SetcoversongList] = useState([]);
+  const [coversongInfo, SetcoversongInfo] = useState(coversong_info_form);
+  const [videoFile, SetvideoFile] = useState(video_file_form);
+  const [videoInfo, SetvideoInfo] = useState(video_info_form);
+
+  function reset() {
+    SetvideoInfo(video_info_form);
+    SetvideoFile(video_file_form);
+    SetcoversongInfo(coversong_info_form);
+  }
+
+  function errorHandle(err) {
+    let [message, type] = err.split("-");
+
+    switch (type) {
+      case "file":
+        SetvideoFile((c) => ({
+          ...c,
+          iserror: true,
+          errorMessage: message,
+          isLoading: false,
+        }));
+        break;
+      case "title":
+        alert(message);
+        SetvideoInfo((c) => ({ ...c, title: "" }));
+        videoTitleInput.current.focus();
+        break;
+      case "coversong":
+        alert(message);
+        SetcoversongInfo((c) => ({ ...c, query: "" }));
+        coversongInput.current.focus();
+        break;
+      case "release":
+        alert(message);
+        break;
+
+      default:
+        console.log("happt");
+    }
+  }
 
   async function VideoFileValidate(e) {
-    let video = document.querySelector(".md_preview_video");
     let file = e.target.files[0];
 
-    const result = await videoService.VideoFileValidate(video, file);
-
-    if (result.status == 400) {
-      SetvideoFileError((err) => ({
-        ...err,
-        state: true,
-        message: result.message,
-      }));
-    } else {
-      SetvideoFile(file);
-      SetvideoFileDisplay(false);
-    }
+    SetvideoFile((c) => ({ ...c, isLoading: true, iserror: false }));
+    await videoService
+      .VideoFileValidate(file)
+      .then((data) =>
+        SetvideoFile((c) => ({
+          ...c,
+          preview_src: data,
+          file,
+          isLoading: false,
+          state: true,
+        }))
+      )
+      .catch((err) => errorHandle(err));
   }
 
   async function VideoUpload(e) {
@@ -53,16 +101,24 @@ export function Videomake({
 
     const formData = new FormData();
 
-    formData.append("video", videoFile);
-    formData.append("title", videoTitle);
-    formData.append("coversong", JSON.stringify(coversonginfo));
-    formData.append("release", release);
+    formData.append("video", videoFile.file);
+    formData.append("title", videoInfo.title);
+    formData.append("coversong", JSON.stringify(coversongInfo));
+    formData.append("release", videoInfo.release);
     formData.append("user_id", user.id);
 
+    SetvideoInfo((c) => ({ ...c, isLoading: true }));
     await videoService
       .createVideo(formData)
-      .then((data) => console.log(data))
-      .catch((err) => console.log(err));
+      .then((data) => {
+        alert("업로드 되었습니다");
+        modalControl("hide", "videomake");
+        reset();
+      })
+      .catch((err) => {
+        errorHandle(err.message);
+        SetvideoInfo((c) => ({ ...c, isLoading: false }));
+      });
   }
 
   async function Coversongs(e) {
@@ -73,7 +129,6 @@ export function Videomake({
     await videoService
       .getCoversong(query)
       .then((data) => {
-        console.log(data);
         SetcoversongList(data.list);
       })
       .catch((err) => console.log(err));
@@ -86,6 +141,13 @@ export function Videomake({
         display: IsmodalOpen && aboutModal == "videomake" ? "flex" : "none",
       }}
     >
+      <div
+        className="video_loading_block"
+        style={{ display: videoInfo.isLoading ? "flex" : "none" }}
+      >
+        업로드 중....
+      </div>
+
       {/* <!-- 비디오 윗부분 --> */}
       <div className="md_video_top_section">
         <div className="md_video_user_section">
@@ -94,7 +156,10 @@ export function Videomake({
 
         <span
           className="md_video_modal_close"
-          onClick={() => modalControl("hide", "videomake")}
+          onClick={() => {
+            modalControl("hide", "videomake");
+            reset();
+          }}
         >
           X
         </span>
@@ -103,7 +168,7 @@ export function Videomake({
       {/* <!-- 비디오 영상 파일 부분 --> */}
       <div
         className="md_video_upload_file_section"
-        style={{ display: videoFileDisplay ? "flex" : "none" }}
+        style={{ display: videoFile.state ? "none" : "flex" }}
       >
         <div className="md_video_upload_top">
           <button className="md_video_file_upload_btn">
@@ -118,9 +183,9 @@ export function Videomake({
           </p>
           <p
             className="md_video_file_err"
-            style={{ display: videoFileError.state ? "block" : "none" }}
+            style={{ display: videoFile.iserror ? "block" : "none" }}
           >
-            {videoFileError.message}
+            {videoFile.iserror && videoFile.errorMessage}
           </p>
         </div>
 
@@ -128,6 +193,7 @@ export function Videomake({
           <button
             className="md_video_file_btn"
             onClick={() => videoFileInput.current.click()}
+            style={{ cursor: videoFile.isLoading ? "not-allowed" : "pointer" }}
           >
             파일선택
           </button>
@@ -145,7 +211,7 @@ export function Videomake({
       {/* <!-- 이부분 --> */}
       <div
         className="md_video_upload_detail_section"
-        style={{ display: !videoFileDisplay ? "flex" : "none" }}
+        style={{ display: videoFile.state ? "flex" : "none" }}
       >
         {/* <!-- 비디오 가운데 부분 --> */}
         <div className="md_video_infomation_section">
@@ -157,31 +223,36 @@ export function Videomake({
           >
             <div className="md_video_preview_box">
               <div className="md_video_preview">
-                <video className="md_preview_video"></video>
+                <video
+                  className="md_preview_video"
+                  controls
+                  src={videoFile.preview_src}
+                ></video>
               </div>
             </div>
 
             <div className="md_video_detail_box">
               {/* <!-- 비디오 제목 --> */}
-              <div
-                className="md_video_detail_title"
-                style={{
-                  borderColor: videoTitle.length <= 20 ? "black" : "red",
-                }}
-              >
+              <div className="md_video_detail_title">
                 <div className="md_vd_title_box">
                   <span className="md_vd_title">제목</span>
-                  <span className="md_vd_title_len">
-                    {videoTitle.length} / 20
+                  <span
+                    className="md_vd_title_len"
+                    style={{
+                      color: videoInfo.title.length > 20 ? "red" : "black",
+                    }}
+                  >
+                    {videoInfo.title.length} / 20
                   </span>
                 </div>
 
                 <textarea
-                  value={videoTitle}
+                  value={videoInfo.title}
+                  ref={videoTitleInput}
                   spellCheck="off"
-                  onChange={(e) => {
-                    SetvideoTitle(e.target.value);
-                  }}
+                  onChange={(e) =>
+                    SetvideoInfo((c) => ({ ...c, title: e.target.value }))
+                  }
                   className="md_vd_title_input"
                 ></textarea>
               </div>
@@ -190,23 +261,13 @@ export function Videomake({
               <div className="md_video_coversong_container">
                 <div className="md_video_coversong_infomation_container">
                   <span className="md_coversong_img_preview">
-                    {coversonginfo.thumbnail_url != "" ? (
-                      <img
-                        style={{
-                          width: "100%",
-                          height: " 100%",
-                          cursor: "pointer",
-                        }}
-                        src={
-                          coversonginfo.thumbnail_url != ""
-                            ? coversonginfo.thumbnail_url
-                            : ""
-                        }
-                        title={coversonginfo.title}
-                      ></img>
-                    ) : (
-                      "?"
-                    )}
+                    <img
+                      style={{ width: "100%", height: "100%" }}
+                      src={coversongInfo.thumbnail_url}
+                      title={`${
+                        coversongInfo.title
+                      } - ${coversongInfo.artists.join(",")}`}
+                    />
                   </span>
                 </div>
 
@@ -214,16 +275,17 @@ export function Videomake({
                   <div className="md_vd_cover_song_input_box">
                     <ul
                       className="md_vd_cover_song_recommand"
-                      style={{ display: coversonginfo.state ? "flex" : "none" }}
+                      style={{ display: coversongInfo.state ? "flex" : "none" }}
                     >
                       {coversongList.map((li, index) => (
                         <li
                           className="md_coversong_list"
                           key={index}
                           onMouseDown={() =>
-                            Setcoversonginfo({
-                              ...coversonginfo,
+                            SetcoversongInfo({
+                              ...coversongInfo,
                               query: li.title,
+                              valid: true,
                               id: li.id,
                               title: li.title,
                               artists: li.artists,
@@ -255,13 +317,13 @@ export function Videomake({
                       ref={coversongInput}
                       spellCheck="false"
                       placeholder="커버송 정보를 입력하세요"
-                      value={coversonginfo.query}
+                      value={coversongInfo.query}
                       onBlur={() =>
-                        Setcoversonginfo({ ...coversonginfo, state: false })
+                        SetcoversongInfo({ ...coversongInfo, state: false })
                       }
                       onChange={(e) => {
-                        Setcoversonginfo({
-                          ...coversonginfo,
+                        SetcoversongInfo({
+                          ...coversongInfo,
                           query: e.target.value,
                           state: true,
                         });
@@ -275,7 +337,7 @@ export function Videomake({
                     <button
                       className="md_vd_cover_song_clear_btn"
                       onClick={() => {
-                        Setcoversonginfo({ ...coversonginfo, query: "" });
+                        SetcoversongInfo({ ...coversongInfo, query: "" });
                         coversongInput.current.focus();
                       }}
                     >
@@ -296,7 +358,9 @@ export function Videomake({
                       name="release_c"
                       className="md_release_radio"
                       value="release"
-                      onChange={() => Setrelease(true)}
+                      onChange={() =>
+                        SetvideoInfo((c) => ({ ...c, release: true }))
+                      }
                     />
 
                     <div className="md_release_intro">
@@ -311,7 +375,9 @@ export function Videomake({
                       name="release_c"
                       className="md_release_radio"
                       value="norelease"
-                      onChange={() => Setrelease(false)}
+                      onChange={() =>
+                        SetvideoInfo((c) => ({ ...c, release: false }))
+                      }
                     />
 
                     <div className="md_release_intro">

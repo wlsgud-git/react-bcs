@@ -62,12 +62,13 @@ class UserDb {
     
         count(distinct fo.following_id) as follower_count,
         count(distinct f.follower_id) as following_count,
-    
-        json_agg(distinct jsonb_build_object(
+   
+	    case when count(distinct vd.title) > 0 then 
+		  json_agg(distinct jsonb_build_object(
            'id', vd.id,
            'title', vd.title,
            'video_url' , vd.video_url
-        )) as my_video
+        )) else '[]' end as my_video
     
       from users as us 
       left join follows as f on us.id = f.following_id
