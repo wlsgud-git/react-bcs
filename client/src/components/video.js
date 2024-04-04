@@ -3,129 +3,33 @@ import { Link } from "react-router-dom";
 
 import "../css/video.css";
 import { useAuth } from "../context/authcontext.js";
-
-// export function LsizeBcsComments({data}){
-//   return (
-
-//   )
-// }
+import { BcsComments } from "./comment.js";
+// import { util_com } from "../utils/comment.js";
 
 export function LsizeBcsVideo({ data, commentService }) {
   let { user, Myfollowing } = useAuth();
   let dp = JSON.parse(data);
 
-  const video = useRef("");
-  const playBtn = useRef("");
-  const volumnBtn = useRef("");
+  const comInput = useRef();
 
-  const commentInput = useRef(null);
+  // 댓글 부분 관련
+  let [commentControl, SetcommentControl] = useState({
+    value: "",
+    display: false,
+    list: [],
+  });
 
-  const [commentDisplay, SetcommentDisplay] = useState(false);
-  const [commentText, SetcommentText] = useState("");
-  const [commentList, SetcommentList] = useState([]);
-  const [currentTime, SetcurrentTime] = useState(0);
-  const [duration, Setduration] = useState(0);
-
-  function PlayorPause() {
-    if (video.current.paused) {
-      video.current.play();
-      playBtn.current.children[0].classList.replace("fa-play", "fa-pause");
-      setInterval(() => {
-        SetcurrentTime(video.current.currentTime);
-      }, 1000);
-    } else {
-      video.current.pause();
-      playBtn.current.children[0].classList.replace("fa-pause", "fa-play");
-    }
-  }
-
-  function NoiseorSilence() {
-    if (!video.current.volume) {
-      video.current.volume = 1;
-      volumnBtn.current.children[0].classList.replace(
-        "fa-volume-xmark",
-        "fa-volume-high"
-      );
-    } else {
-      video.current.volume = 0;
-      volumnBtn.current.children[0].classList.replace(
-        "fa-volume-high",
-        "fa-volume-xmark"
-      );
-    }
-  }
-
-  function formatTime(currenttime) {
-    let currentTime = currenttime;
-
-    // currents
-    let currentMinute = Math.floor(currentTime / 60);
-    let currentSecond = Math.floor(currentTime % 60);
-
-    currentMinute =
-      currentMinute < 10
-        ? `0${currentMinute.toString()}`
-        : `${currentMinute.toString()}`;
-    currentSecond =
-      currentSecond < 10
-        ? `0${currentSecond.toString()}`
-        : `${currentSecond.toString()}`;
-
-    return `${currentMinute}:${currentSecond}`;
-  }
-
-  function HandleProgressbar(e) {
-    const pos = e.target.value;
-    SetcurrentTime(pos);
-    video.current.currentTime = pos;
-  }
-
-  async function CreateComment(e) {
+  async function commentCreate(e) {
     e.preventDefault();
 
     await commentService
-      .createComment(commentText, dp.id, user.id)
-      .then((data) => {
-        alert("댓글이 작성되었습니다.");
-        let info = {
-          id: user.id,
-          nickname: user.nickname,
-          body: commentText,
-          profile_image_url: user.profile_image_url,
-        };
-        let newArr = [info, ...commentList];
-        SetcommentText("");
-        SetcommentList(newArr);
-      })
-      .catch((err) => console.log(err));
-    // await commentService
-    //   .modifyComment(
-    //     "$2b$09$R4Q52dE5iRn.5ZIT0RLmyekZocnkvW.ZL.82rjkJ1UeDCCn3aoVGG",
-    //     commentText
-    //   )
-    //   .then((data) => {
-    //     let newArr = [...commentList];
-
-    //     newArr[0].body = commentText;
-    //     SetcommentList(newArr);
-    //   })
-    //   .catch((err) => console.log(err));
-  }
-
-  async function DeleteComment(index, info) {
-    await commentService
-      .DeleteComment(info.id)
-      .then((data) => {
-        alert("댓글이 삭제되었습니다");
-        let newArr = [...commentList];
-        newArr.splice(index, 1);
-        SetcommentList(newArr);
-      })
+      .createComment(commentControl.value, dp.id, dp.oner[0].id)
+      .then((data) => console.log(data))
       .catch((err) => console.log(err));
   }
 
   useEffect(() => {
-    SetcommentList(dp.comments);
+    SetcommentControl((c) => ({ ...c, list: dp.comments }));
   }, []);
 
   return (
@@ -135,12 +39,7 @@ export function LsizeBcsVideo({ data, commentService }) {
         {/* <!-- 비디오 영상과 썸네일--> */}
         <div className="bcs_lsize_video">
           <Link to={`/about/${dp.id}`} className="bcs_lsize_video_detail_go">
-            <video
-              src={dp.video_url}
-              className="bcs_lsize_video_src"
-              ref={video}
-              onLoadedMetadata={() => Setduration(video.current.duration)}
-            ></video>
+            <video src={dp.video_url} className="bcs_lsize_video_src"></video>
           </Link>
         </div>
 
@@ -207,34 +106,28 @@ export function LsizeBcsVideo({ data, commentService }) {
             <button
               className="video_comment"
               title="댓글"
-              onClick={() => SetcommentDisplay(true)}
+              onClick={() =>
+                SetcommentControl((c) => ({ ...c, display: true }))
+              }
             >
               <i className="fa-solid fa-comment"></i>
             </button>
-            <span className="video_comments_count">3.2</span>
+            <span className="video_comments_count">
+              {commentControl.list.length}
+            </span>
           </div>
         </div>
 
         {/* <!-- 비디오 플레이 및 불륨 부분  --> */}
         <div className="bcs_lsize_func_control">
           <span className="control_video_play_btn">
-            <button
-              className="control_play_btn"
-              ref={playBtn}
-              onClick={() => {
-                PlayorPause(video.current, playBtn.current);
-              }}
-            >
+            <button className="control_play_btn">
               <i className="fa-solid fa-play"></i>
             </button>
           </span>
 
           <span className="control_video_volumn_btn">
-            <button
-              className="control_volumn_btn"
-              ref={volumnBtn}
-              onClick={NoiseorSilence}
-            >
+            <button className="control_volumn_btn">
               <i className="fa-solid fa-volume-high"></i>
             </button>
           </span>
@@ -242,38 +135,33 @@ export function LsizeBcsVideo({ data, commentService }) {
 
         {/* <!-- 비디오 진행 부분 --> */}
         <div className="bcs_lsize_func_bottom">
-          <span className="video_current_time">{formatTime(currentTime)}</span>
+          <span className="video_current_time"></span>
 
           <div className="progressbar_section">
-            <input
-              className="progressbar_range"
-              type="range"
-              min={0}
-              max={duration}
-              value={currentTime}
-              onChange={HandleProgressbar}
-            ></input>
+            <input className="progressbar_range" type="range" min={0}></input>
           </div>
 
-          <span className="video_full_time">{formatTime(duration)}</span>
+          <span className="video_full_time"></span>
         </div>
       </div>
 
       {/* <!-- 댓글 부분 --> */}
       <div
         className="bcs_song_comment_container"
-        style={{ display: commentDisplay ? "flex" : "none" }}
+        style={{ display: commentControl.display ? "flex" : "none" }}
       >
         <div className="comments_info">
           <div className="comments_info_text">
             <span className="comments_text">댓글수</span>
-            <span className="comments_count">{commentList.length}</span>
+            <span className="comments_count">{commentControl.list.length}</span>
           </div>
 
           <div className="comments_close">
             <button
               className="comments_close_btn"
-              onClick={() => SetcommentDisplay(false)}
+              onClick={() =>
+                SetcommentControl((c) => ({ ...c, display: false }))
+              }
             >
               X
             </button>
@@ -281,62 +169,13 @@ export function LsizeBcsVideo({ data, commentService }) {
         </div>
 
         <ul className="comments_list">
-          {commentList.map((data, idx) => (
-            <li className="c_info_box" key={idx}>
-              {/* <!-- 유저 프로필 사진 부분 --> */}
-              <div className="c_user_profile">
-                <span className="c_user_profile_box">
-                  <img src={data.profile_image_url} />
-                </span>
-              </div>
-              {/* <!-- 댓글 내용 부분 --> */}
-              <div className="c_content_info">
-                <div className="c_userOrcreate">
-                  <span className="c_usernick"> {data.nickname} </span>
-                  <span className="c_createat">3년전</span>
-                </div>
-
-                <div className="c_content_box">
-                  <span className="c_content"> {data.body} </span>
-                </div>
-              </div>
-
-              <div
-                className="c_other"
-                style={{
-                  display: user && data.user_id == user.id ? "block" : "none",
-                }}
-              >
-                <button className="c_other_btn">
-                  <i className="fa-solid fa-ellipsis-vertical"></i>
-                </button>
-
-                <div className="c_content_control">
-                  <button
-                    className="c_modify"
-                    onClick={() => {
-                      SetcommentText(commentList[idx].body);
-                      commentInput.current.focus();
-                    }}
-                  >
-                    {" "}
-                    <i className="fa-solid fa-pencil"></i> 수정
-                  </button>
-                  <button
-                    className="c_delete"
-                    onClick={() => DeleteComment(idx, commentList[idx])}
-                  >
-                    {" "}
-                    <i className="fa-solid fa-trash-can"></i> 삭제
-                  </button>
-                </div>
-              </div>
-            </li>
+          {commentControl.list.map((data, idx) => (
+            <BcsComments data={data} index={idx} user={user} />
           ))}
         </ul>
 
         <div className="comment_write">
-          <form method="post" className="comment_form" onSubmit={CreateComment}>
+          <form method="post" className="comment_form" onSubmit={commentCreate}>
             <div className="writer_thumbnail">
               <span className="writer_thumb_box">
                 <img src={user ? user.profile_image_url : ""} />
@@ -346,12 +185,15 @@ export function LsizeBcsVideo({ data, commentService }) {
             <div className="comment_write_info">
               <div className="comment_write_input">
                 <input
-                  value={commentText}
-                  onChange={(e) => SetcommentText(e.target.value)}
+                  disabled={!user}
                   type="text"
-                  ref={commentInput}
+                  value={commentControl.value}
+                  ref={comInput}
+                  onChange={(e) =>
+                    SetcommentControl((c) => ({ ...c, value: e.target.value }))
+                  }
                   spellCheck="false"
-                  placeholder="댓글 작성"
+                  placeholder={user ? "댓글 작성" : "로그인 후 이용가능합니다"}
                   className="comment_input"
                 />
               </div>
@@ -359,19 +201,14 @@ export function LsizeBcsVideo({ data, commentService }) {
               <div className="comment_control_sec">
                 <button
                   className="comment_clear"
-                  onClick={() => SetcommentText("")}
+                  onClick={() => {
+                    SetcommentControl((c) => ({ ...c, value: "" }));
+                    comInput.current.focus();
+                  }}
                 >
                   취소
                 </button>
-                <button
-                  className="comment_btn"
-                  disabled={!commentText.length}
-                  style={{
-                    backgroundColor: !commentText.length ? "gray" : "blue",
-                  }}
-                >
-                  댓글
-                </button>
+                <button className="comment_btn">댓글</button>
               </div>
             </div>
           </form>

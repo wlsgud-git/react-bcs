@@ -30,13 +30,14 @@ class VideoDb {
             'thumbnail_url', cs.thumbnail_url
           )) as coversong_info,
         
-        json_agg(distinct jsonb_build_object(
+          case when count(distinct co.id) > 0 then 
+          json_agg(distinct jsonb_build_object(
             'id', co.id,
             'user_id', u.id,
             'nickname', u.nickname,
             'profile_image_url', u.profile_image_url,
             'body', co.body
-          )) as comments
+          )) else '[]' end as comments
     
       from videos as vd
       left join users as us on us.id = vd.writer_id

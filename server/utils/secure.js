@@ -35,7 +35,7 @@ class Jwt {
       const access_token = await jwt.sign(
         { email: email },
         config.jwt.a_secret_key,
-        { expiresIn: "10s" }
+        { expiresIn: "10m" }
       );
       return access_token;
     } catch (err) {

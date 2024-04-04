@@ -4,6 +4,7 @@ export class CommentService {
   }
 
   async createComment(body, video_id, user_id) {
+    if (body == "") return;
     return this.http.fetching("/comment", {
       method: "post",
       body: JSON.stringify({ body, video_id, user_id }),
